@@ -45,8 +45,6 @@ GitHub Codespace → Cloudflare tunnel → localhost:PORT → vault on disk
 
 ## Install (Windows)
 
-> **Early access:** Email xiaoyanfeifei@users.noreply.github.com to request access. You'll be added to the private repo and can download `install.ps1` from there.
-
 ### Step 1 — Install prerequisites
 
 These must be installed **before** running the installer:
@@ -60,7 +58,6 @@ After installing both, **open a new PowerShell window** so they're on your PATH.
 
 ### Step 2 — Download install.ps1
 
-Once you have repo access:
 1. Go to `github.com/xiaoyanfeifei/obsidian-ai-mcp`
 2. Click `install.ps1`
 3. Click **Raw** → right-click → **Save As** → save to your `Downloads` folder

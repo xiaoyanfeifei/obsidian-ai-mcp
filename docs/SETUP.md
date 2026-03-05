@@ -19,15 +19,7 @@ Step-by-step instructions for getting obsidian-ai-mcp running. Two modes covered
 
 ---
 
-## Step 1 — Get repo access
-
-Email **xiaoyanfeifei@users.noreply.github.com** to request collaborator access to the private repo.
-
-Once added, you'll get a GitHub notification. Accept the invitation at `github.com/notifications`.
-
----
-
-## Step 2 — Clone the repo
+## Step 1 — Clone the repo
 
 Open PowerShell and run:
 
