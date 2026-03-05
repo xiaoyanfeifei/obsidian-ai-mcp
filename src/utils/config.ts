@@ -15,9 +15,9 @@
  *   - templates (per note type)
  *   - custom_types (additional note types)
  *
- * User preferences (Layer 2):
- *   Place a CLAUDE.md file in the vault root. Claude Code loads it automatically
- *   at session start — no tool call needed. vault_summary surfaces it too.
+ * User preferences (Layer 2 — CLAUDE.md):
+ *   Place a CLAUDE.md in the vault root. Claude Code auto-loads it every session.
+ *   vault_summary also surfaces it via getVaultPreferences() as a fallback.
  */
 
 import { readFile } from 'fs/promises';
