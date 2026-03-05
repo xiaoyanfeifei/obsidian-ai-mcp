@@ -8,7 +8,7 @@ import { writeFile, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
 import { z } from 'zod';
 import matter from 'gray-matter';
-import { getVaultPath } from '../utils/vault.js';
+import { getVaultPath, sanitizeWikilinks } from '../utils/vault.js';
 import { today, currentTime } from '../utils/frontmatter.js';
 import { NOTE_TYPES, buildInboxFilename, type NoteType } from '../config/note-types.js';
 import { getConfig, renderTemplate } from '../utils/config.js';
@@ -145,7 +145,8 @@ export async function executeCreateNote(args: unknown) {
     if (input.feature) frontmatterData.feature = input.feature;
   }
 
-  const fileContent = matter.stringify('\n' + body, frontmatterData);
+  const sanitizedBody = await sanitizeWikilinks(vaultPath, body);
+  const fileContent = matter.stringify('\n' + sanitizedBody, frontmatterData);
   await mkdir(dirname(filePath), { recursive: true });
   await writeFile(filePath, fileContent, 'utf-8');
 

@@ -49,3 +49,26 @@ export const TASK_RE = /^[-*]\s+\[(.)\]\s+(.*)$/;
 
 /** Matches open/unchecked task lines only. Group 1 = task text. */
 export const OPEN_TASK_RE = /^[-*]\s+\[ \]\s+(.+)$/m;
+
+/**
+ * Scan content for [[wikilinks]], check each against the vault, and strip
+ * brackets for any that don't exist. Prevents broken links that silently
+ * create empty files in Obsidian.
+ */
+export async function sanitizeWikilinks(vaultPath: string, content: string): Promise<string> {
+  const wikilinkRe = /\[\[([^\]]+)\]\]/g;
+  const matches = [...content.matchAll(wikilinkRe)];
+  if (matches.length === 0) return content;
+
+  // Build set of all note basenames (without .md) in the vault
+  const existing = new Set<string>();
+  for await (const fp of walkVault(vaultPath)) {
+    existing.add(basename(fp, '.md').toLowerCase());
+  }
+
+  return content.replace(wikilinkRe, (_match, inner) => {
+    // Support [[Note Name|display text]] — check the target part only
+    const target = inner.split('|')[0].trim();
+    return existing.has(target.toLowerCase()) ? `[[${inner}]]` : target;
+  });
+}

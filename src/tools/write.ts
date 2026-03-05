@@ -13,7 +13,7 @@ import { readFile, writeFile, mkdir, stat } from 'fs/promises';
 import { join, dirname, basename } from 'path';
 import { z } from 'zod';
 import matter from 'gray-matter';
-import { getVaultPath, walkVault, findNoteByName, toRelPath, OPEN_TASK_RE } from '../utils/vault.js';
+import { getVaultPath, walkVault, findNoteByName, toRelPath, OPEN_TASK_RE, sanitizeWikilinks } from '../utils/vault.js';
 import { today, parseInboxFilename, injectFrontmatter, appendToContent, prependToContent, parseFrontmatter } from '../utils/frontmatter.js';
 import { getConfig, getVaultPreferences } from '../utils/config.js';
 
@@ -226,7 +226,7 @@ export async function executeWriteNote(args: unknown) {
 
   await mkdir(dirname(filePath), { recursive: true });
 
-  let content = input.content;
+  let content = await sanitizeWikilinks(vaultPath, input.content);
   if (resolvedPath.startsWith(config.inbox_folder + '/')) {
     const fromFilename = parseInboxFilename(basename(filePath));
     content = injectFrontmatter(content, {
@@ -266,9 +266,10 @@ export async function executeAppendToNote(args: unknown) {
   } catch { /* new file */ }
 
   await mkdir(dirname(filePath!), { recursive: true });
+  const sanitized = await sanitizeWikilinks(vaultPath, input.content);
   const updated = input.position === 'top'
-    ? prependToContent(existing, input.content, changeNote)
-    : appendToContent(existing, input.content, changeNote);
+    ? prependToContent(existing, sanitized, changeNote)
+    : appendToContent(existing, sanitized, changeNote);
   await writeFile(filePath!, updated, 'utf-8');
 
   return {

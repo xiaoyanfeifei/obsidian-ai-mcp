@@ -308,18 +308,21 @@ These behaviors cannot be overridden — they're safety guarantees:
 
 ### User preferences (Layer 2)
 
-Create a `vault_context.md` file in your vault root. The MCP server reads it at startup and **automatically prepends it to every tool response** — no tool call needed, no reminders required:
+Create a `vault_context.md` file in your vault root. The MCP server reads it at startup and sends it to Claude as part of the MCP session handshake — once per session, zero per-call overhead:
 
 ```markdown
-## My preferences
+# Vault context
 
-- Write devlogs in first person, past tense
-- AuthService = the login + token system; team: Sam, Jordan
-- Always link action items back to [[Current Works]]
-- For meeting notes, always include the project tag
+Rules — follow these always:
+
+1. Timezone is Pacific (America/Los_Angeles)
+2. ProjectX = my main feature · team: Sam, Jordan, Taylor
+3. Link action items to [[Current Works]] only if that exact note exists
+4. Notes are personal — written for quick re-reading, not for an audience
+5. Big picture first: one sentence on what this is and why it matters
 ```
 
-The installer creates a starter `vault_context.md` with the writing style principles pre-filled.
+The installer creates a starter `vault_context.md` with writing style principles pre-filled. Edit it freely — changes take effect on the next Claude session (server restart).
 
 ---
 
