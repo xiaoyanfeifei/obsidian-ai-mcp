@@ -423,9 +423,12 @@
 
 <!-- ── Hero ─────────────────────────────────────────────────────────────────── -->
 <div class="hero">
-  <div class="hero-badge">MCP Server · 14 Tools · Windows</div>
+  <div class="hero-badge">🚧 Early Stage &nbsp;·&nbsp; MCP Server · 14 Tools · Windows</div>
   <h1>Your AI assistant,<br>inside your notes</h1>
   <p>obsidian-ai-mcp connects Claude to your Obsidian vault — search, read, write, and manage notes using natural language. Your files never leave your machine.</p>
+  <div style="display:inline-block;background:rgba(217,119,6,.15);border:1px solid rgba(217,119,6,.4);border-radius:10px;padding:12px 20px;margin-bottom:28px;font-size:.88rem;color:#fcd34d;max-width:520px;">
+    ⚠️ <strong>Early stage — private access only.</strong> This tool is under active development and shared within the open source. To get access, email <a href="mailto:xiaoyanfeifei@users.noreply.github.com" style="color:#fcd34d;text-decoration:underline;">xiaoyanfeifei@users.noreply.github.com</a>.
+  </div>
   <div class="hero-actions">
     <a class="btn btn-primary" href="#install">⚡ Get started</a>
     <a class="btn btn-secondary" href="#tools">View all 14 tools →</a>
@@ -714,6 +717,22 @@
     <h2>Install in one command</h2>
     <p class="section-intro">Requires Windows, Node.js 18+, and Claude Code CLI. The installer handles everything else — including Obsidian, vault setup, and MCP registration.</p>
 
+    <div style="background:rgba(217,119,6,.1);border:1px solid rgba(217,119,6,.35);border-radius:10px;padding:16px 20px;max-width:620px;margin-bottom:32px;font-size:.88rem;color:#fcd34d;">
+      🚧 <strong>Early access:</strong> The repo is currently private. Email <a href="mailto:xiaoyanfeifei@users.noreply.github.com" style="color:#fcd34d;text-decoration:underline;">xiaoyanfeifei@users.noreply.github.com</a> to request access, then follow the steps below.
+    </div>
+
+    <p style="color:var(--text-muted); font-size:.9rem; margin-bottom:24px;">Once you have repo access:</p>
+    <div style="display:flex;flex-direction:column;gap:10px;max-width:580px;margin-bottom:32px;">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <span style="color:#86efac;font-weight:700;flex-shrink:0;">①</span>
+        <span>Clone the repo:<br><code style="font-size:.82rem;color:#94a3b8;">git clone https://github.com/xiaoyanfeifei/obsidian-ai-mcp</code></span>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <span style="color:#86efac;font-weight:700;flex-shrink:0;">②</span>
+        <span>Run the installer from the cloned folder:</span>
+      </div>
+    </div>
+
     <div class="install-box" style="max-width:660px; margin-bottom:32px;">
       <div class="install-header">
         <div class="traffic-light tl-red"></div>
@@ -722,27 +741,30 @@
         <span style="font-size:.8rem;color:var(--text-muted);margin-left:8px;">PowerShell</span>
       </div>
       <div class="install-body">
-        <span class="cmd-comment"># Run in PowerShell as your normal user (not admin)</span><br>
-        <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">iex (irm </span><span class="cmd-string">"https://aka.ms/obsidian-mcp/install"</span><span class="cmd-text">)</span>
+        <span class="cmd-comment"># Allow local scripts to run (one-time)</span><br>
+        <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force</span><br>
+        <br>
+        <span class="cmd-comment"># Run the installer</span><br>
+        <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">& .\obsidian-ai-mcp\install.ps1</span>
       </div>
     </div>
 
     <p style="color:var(--text-muted); font-size:.9rem; margin-bottom:24px;">The installer will walk you through:</p>
     <div style="display:flex;flex-direction:column;gap:10px;max-width:520px;">
       <div style="display:flex;gap:12px;align-items:center;">
-        <span style="color:#86efac;font-weight:700;">①</span>
+        <span style="color:#86efac;font-weight:700;">③</span>
         <span>Install Obsidian (if not already installed)</span>
       </div>
       <div style="display:flex;gap:12px;align-items:center;">
-        <span style="color:#86efac;font-weight:700;">②</span>
+        <span style="color:#86efac;font-weight:700;">④</span>
         <span>Set your vault path and create the <code>Inbox/</code> + <code>Notes/</code> structure</span>
       </div>
       <div style="display:flex;gap:12px;align-items:center;">
-        <span style="color:#86efac;font-weight:700;">③</span>
-        <span>Generate a secure auth token and save it as a user environment variable</span>
+        <span style="color:#86efac;font-weight:700;">⑤</span>
+        <span>Generate a secure auth token saved as a user environment variable</span>
       </div>
       <div style="display:flex;gap:12px;align-items:center;">
-        <span style="color:#86efac;font-weight:700;">④</span>
+        <span style="color:#86efac;font-weight:700;">⑥</span>
         <span>Register the MCP server with Claude Code — tools are live immediately</span>
       </div>
     </div>
