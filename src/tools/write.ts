@@ -94,6 +94,15 @@ CAPTURE-FIRST RULE: Unless the user explicitly names a specific note to update, 
 - Meeting actions, follow-ups, random thoughts
 Do NOT create or update permanent notes (e.g. Current Works) for these — use Capture.md.
 
+CAPTURE FORMAT: Every entry written to Capture.md must start with a bold date prefix using today's date.
+- Short entry:  **YYYY-MM-DD** — <content on one line>
+- Long entry:   **YYYY-MM-DD** — <title>\n<body>\n\n---
+Resolve relative time expressions to actual dates at write time:
+- "this week" → "this week (Mon DD – Fri DD)"
+- "next week" → "next week (Mon DD – Fri DD)"
+- "today", "tomorrow" → the actual date
+Never leave relative time unresolved — the reader needs to know what week it was when captured.
+
 STRUCTURED NOTES RULE: Only write to a specific permanent note when the user explicitly asks (e.g. "add this to Current Works", "update my spec"). When doing so, read the note first to understand its structure (headings, sections) and insert content in the correct section — never blindly append to the end.
 
 INBOX-FIRST RULE: New files created via this tool go to Inbox/ unless a folder is specified.
