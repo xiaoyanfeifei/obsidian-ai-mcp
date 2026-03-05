@@ -49,6 +49,8 @@ Naming convention for new Inbox drafts:  YYYY-MM-DD - Type - Topic.md
 Frontmatter (type, topic, status, created, updated, changes) is auto-injected for Inbox files.
 Type and topic are inferred from the filename if not provided explicitly.
 
+CAPTURE-FIRST RULE: For quick tasks, short notes, or anything the user hasn't explicitly asked to put in a specific note — use append_to_note on the capture file (Inbox/Capture.md) with position="top" instead. Only use write_note when creating or fully rewriting a structured note.
+
 WRITING STYLE — personal notes written for quick re-reading and thinking, not for an audience:
 1. Big picture first — one sentence on what this is and why it matters
 2. Source is first-class — attribute every claim; open with a source banner for notes from external sources
@@ -86,10 +88,16 @@ export const appendToNoteTool = {
   name: 'append_to_note',
   description: `Append content to an existing note, updating its frontmatter change log automatically.
 
-INBOX-FIRST RULE: New files created via this tool go to Inbox/ unless a folder is specified.
-Existing files are updated in place wherever they are in the vault.
+CAPTURE-FIRST RULE: Unless the user explicitly names a specific note to update, ALL quick captures go to the capture file (Inbox/Capture.md) with position="top":
+- Tasks: "add a task", "remind me to...", "I need to..."
+- Short notes: "note that...", "log that...", "remember..."
+- Meeting actions, follow-ups, random thoughts
+Do NOT create or update permanent notes (e.g. Current Works) for these — use Capture.md.
 
-CAPTURE RULE: When writing to the capture file (see vault_summary → config.capture_file), always set position="top" so new entries appear at the top.`,
+STRUCTURED NOTES RULE: Only write to a specific permanent note when the user explicitly asks (e.g. "add this to Current Works", "update my spec"). When doing so, read the note first to understand its structure (headings, sections) and insert content in the correct section — never blindly append to the end.
+
+INBOX-FIRST RULE: New files created via this tool go to Inbox/ unless a folder is specified.
+Existing files are updated in place wherever they are in the vault.`,
   inputSchema: {
     type: 'object',
     properties: {
