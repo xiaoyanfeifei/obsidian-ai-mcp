@@ -4,12 +4,22 @@
 
 $ErrorActionPreference = "Stop"
 
-# Config
+# ── Config ────────────────────────────────────────────────────────────────────
+# VAULT: reads from OBSIDIAN_VAULT env var (set by install.ps1).
+#        If not set, edit the fallback path below.
+$VAULT = if ($env:OBSIDIAN_VAULT) { $env:OBSIDIAN_VAULT } else {
+    Write-Warning "OBSIDIAN_VAULT env var not set — run install.ps1 first, or set the path below."
+    "C:\path\to\your\vault"  # <-- edit if not using install.ps1
+}
+
+# AUTH_TOKEN: shared secret between this server and your Codespace.
+#             Change to anything secret — anyone with this token can read/write your vault.
+$AUTH_TOKEN  = "obsidian-mcp-2024"  # <-- change this
+
 $PORT        = "3000"
-$AUTH_TOKEN  = "obsidian-mcp-2024"
-$VAULT       = "C:\Users\yanfeiliu\OneDrive - Microsoft\Documents\Work2026"
 # $TIMEZONE = "America/New_York"  # Uncomment to override — defaults to system timezone
 $CLOUDFLARED = "C:\Program Files (x86)\cloudflared\cloudflared.exe"
+# ──────────────────────────────────────────────────────────────────────────────
 $CF_LOG      = "$env:TEMP\obsidian-mcp-cf.log"
 $SERVER_SCRIPT = "$PSScriptRoot\dist\index.js"
 
