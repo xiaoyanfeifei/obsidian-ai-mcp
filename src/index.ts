@@ -27,7 +27,7 @@ import {
 import { getVaultPath } from './utils/vault.js';
 
 // Read vault_context.md once at startup and cache it.
-// Prepended to every tool response so Claude always has user preferences in context.
+// Passed as MCP `instructions` — sent once at session handshake, not on every tool call.
 let _vaultContext: string | null | undefined = undefined;
 async function getVaultContext(): Promise<string | null> {
   if (_vaultContext !== undefined) return _vaultContext;
@@ -48,10 +48,10 @@ import { renameNoteTool, executeRenameNote, deleteNoteTool, executeDeleteNote } 
 
 // Factory: create a fresh Server instance with all handlers registered.
 // Called per-request in HTTP mode so each MCP session starts with clean state.
-function createMcpServer(): Server {
+function createMcpServer(instructions?: string): Server {
   const s = new Server(
     { name: 'obsidian-ai-mcp', version: '0.1.0' },
-    { capabilities: { tools: {} } }
+    { capabilities: { tools: {} }, instructions }
   );
 
   s.setRequestHandler(ListToolsRequestSchema, async () => ({
@@ -61,37 +61,23 @@ function createMcpServer(): Server {
   s.setRequestHandler(CallToolRequestSchema, async (request) => {
     const { name, arguments: args } = request.params;
     try {
-      let result;
       switch (name) {
-        case 'vault_search':   result = await executeVaultSearch(args); break;
-        case 'read_note':      result = await executeReadNote(args); break;
-        case 'list_tasks':     result = await executeListTasks(args); break;
-        case 'complete_task':  result = await executeCompleteTask(args); break;
-        case 'vault_summary':  result = await executeVaultSummary(args); break;
-        case 'vault_review':   result = await executeVaultReview(args); break;
-        case 'create_note':    result = await executeCreateNote(args); break;
-        case 'list_notes':     result = await executeListNotes(args); break;
-        case 'list_inbox':     result = await executeListInbox(args); break;
-        case 'write_note':     result = await executeWriteNote(args); break;
-        case 'append_to_note': result = await executeAppendToNote(args); break;
-        case 'promote_note':   result = await executePromoteNote(args); break;
-        case 'rename_note':    result = await executeRenameNote(args); break;
-        case 'delete_note':    result = await executeDeleteNote(args); break;
+        case 'vault_search':   return await executeVaultSearch(args);
+        case 'read_note':      return await executeReadNote(args);
+        case 'list_tasks':     return await executeListTasks(args);
+        case 'complete_task':  return await executeCompleteTask(args);
+        case 'vault_summary':  return await executeVaultSummary(args);
+        case 'vault_review':   return await executeVaultReview(args);
+        case 'create_note':    return await executeCreateNote(args);
+        case 'list_notes':     return await executeListNotes(args);
+        case 'list_inbox':     return await executeListInbox(args);
+        case 'write_note':     return await executeWriteNote(args);
+        case 'append_to_note': return await executeAppendToNote(args);
+        case 'promote_note':   return await executePromoteNote(args);
+        case 'rename_note':    return await executeRenameNote(args);
+        case 'delete_note':    return await executeDeleteNote(args);
         default: throw new Error(`Unknown tool: ${name}`);
       }
-
-      // Prepend vault_context.md to every response so user preferences are always in context
-      const ctx = await getVaultContext();
-      if (ctx) {
-        return {
-          ...result,
-          content: [
-            { type: 'text' as const, text: `<vault_context>\n${ctx}\n</vault_context>` },
-            ...result.content,
-          ],
-        };
-      }
-      return result;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       return { content: [{ type: 'text', text: `Error executing ${name}: ${errorMessage}` }], isError: true };
@@ -103,7 +89,7 @@ function createMcpServer(): Server {
 
 async function startStdio(): Promise<void> {
   const transport = new StdioServerTransport();
-  await createMcpServer().connect(transport);
+  await createMcpServer(await getVaultContext() ?? undefined).connect(transport);
   console.error('Obsidian AI MCP Server started (stdio)');
   console.error('Vault path:', process.env.OBSIDIAN_VAULT || 'Not configured');
 }
@@ -199,7 +185,7 @@ async function startHttp(port: number, authToken: string, baseUrl: string): Prom
     requireBearerAuth({ verifier: provider }),
     async (req: Request, res: Response) => {
       const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
-      await createMcpServer().connect(transport);
+      await createMcpServer(await getVaultContext() ?? undefined).connect(transport);
       try {
         await transport.handleRequest(req, res, req.body);
       } catch (err) {
