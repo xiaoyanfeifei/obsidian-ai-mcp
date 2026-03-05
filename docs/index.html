@@ -717,55 +717,94 @@
     <h2>Install in one command</h2>
     <p class="section-intro">Requires Windows, Node.js 18+, and Claude Code CLI. The installer handles everything else — including Obsidian, vault setup, and MCP registration.</p>
 
-    <div style="background:rgba(217,119,6,.1);border:1px solid rgba(217,119,6,.35);border-radius:10px;padding:16px 20px;max-width:620px;margin-bottom:32px;font-size:.88rem;color:#fcd34d;">
-      🚧 <strong>Early access:</strong> The repo is currently private. Email <a href="mailto:xiaoyanfeifei@users.noreply.github.com" style="color:#fcd34d;text-decoration:underline;">xiaoyanfeifei@users.noreply.github.com</a> to request access, then follow the steps below.
+    <div style="background:rgba(217,119,6,.1);border:1px solid rgba(217,119,6,.35);border-radius:10px;padding:16px 20px;max-width:620px;margin-bottom:40px;font-size:.88rem;color:#fcd34d;">
+      🚧 <strong>Early access:</strong> Email <a href="mailto:xiaoyanfeifei@users.noreply.github.com" style="color:#fcd34d;text-decoration:underline;">xiaoyanfeifei@users.noreply.github.com</a> to get access. You'll be added to the private repo.
     </div>
 
-    <p style="color:var(--text-muted); font-size:.9rem; margin-bottom:24px;">Once you have repo access:</p>
-    <div style="display:flex;flex-direction:column;gap:10px;max-width:580px;margin-bottom:32px;">
-      <div style="display:flex;gap:12px;align-items:flex-start;">
-        <span style="color:#86efac;font-weight:700;flex-shrink:0;">①</span>
-        <span>Clone the repo:<br><code style="font-size:.82rem;color:#94a3b8;">git clone https://github.com/xiaoyanfeifei/obsidian-ai-mcp</code></span>
-      </div>
-      <div style="display:flex;gap:12px;align-items:flex-start;">
-        <span style="color:#86efac;font-weight:700;flex-shrink:0;">②</span>
-        <span>Run the installer from the cloned folder:</span>
-      </div>
-    </div>
-
-    <div class="install-box" style="max-width:660px; margin-bottom:32px;">
-      <div class="install-header">
-        <div class="traffic-light tl-red"></div>
-        <div class="traffic-light tl-yellow"></div>
-        <div class="traffic-light tl-green"></div>
-        <span style="font-size:.8rem;color:var(--text-muted);margin-left:8px;">PowerShell</span>
-      </div>
-      <div class="install-body">
-        <span class="cmd-comment"># Allow local scripts to run (one-time)</span><br>
-        <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force</span><br>
-        <br>
-        <span class="cmd-comment"># Run the installer</span><br>
-        <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">& .\obsidian-ai-mcp\install.ps1</span>
+    <!-- Step 1 -->
+    <div style="display:flex;gap:16px;align-items:flex-start;max-width:640px;margin-bottom:32px;">
+      <div style="background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--purple-light);flex-shrink:0;margin-top:2px;">1</div>
+      <div>
+        <h4 style="margin-bottom:8px;">Install prerequisites first</h4>
+        <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:10px;">These must be installed <strong style="color:var(--text);">before</strong> running the installer or it will error out.</p>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:.85rem;">
+            <strong>Node.js 18+</strong> &nbsp;→&nbsp; <a href="https://nodejs.org">nodejs.org</a> — download and run the installer
+          </div>
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:.85rem;">
+            <strong>Claude Code CLI</strong> &nbsp;→&nbsp; <a href="https://claude.ai/code">claude.ai/code</a> — follow the setup instructions
+          </div>
+        </div>
+        <p style="color:var(--text-muted);font-size:.82rem;margin-top:8px;">After installing both, open a <strong style="color:var(--text);">new PowerShell window</strong> so they're on your PATH.</p>
       </div>
     </div>
 
-    <p style="color:var(--text-muted); font-size:.9rem; margin-bottom:24px;">The installer will walk you through:</p>
-    <div style="display:flex;flex-direction:column;gap:10px;max-width:520px;">
-      <div style="display:flex;gap:12px;align-items:center;">
-        <span style="color:#86efac;font-weight:700;">③</span>
-        <span>Install Obsidian (if not already installed)</span>
+    <!-- Step 2 -->
+    <div style="display:flex;gap:16px;align-items:flex-start;max-width:640px;margin-bottom:32px;">
+      <div style="background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--purple-light);flex-shrink:0;margin-top:2px;">2</div>
+      <div>
+        <h4 style="margin-bottom:8px;">Download install.ps1</h4>
+        <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:6px;">Once added to the repo:</p>
+        <ol style="color:var(--text-muted);font-size:.85rem;padding-left:20px;line-height:2;">
+          <li>Go to <code>github.com/xiaoyanfeifei/obsidian-ai-mcp</code></li>
+          <li>Click <code>install.ps1</code></li>
+          <li>Click <strong>Raw</strong> → right-click → <strong>Save As</strong> → save to Downloads</li>
+        </ol>
       </div>
-      <div style="display:flex;gap:12px;align-items:center;">
-        <span style="color:#86efac;font-weight:700;">④</span>
-        <span>Set your vault path and create the <code>Inbox/</code> + <code>Notes/</code> structure</span>
+    </div>
+
+    <!-- Step 3 -->
+    <div style="display:flex;gap:16px;align-items:flex-start;max-width:640px;margin-bottom:32px;">
+      <div style="background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--purple-light);flex-shrink:0;margin-top:2px;">3</div>
+      <div style="width:100%;">
+        <h4 style="margin-bottom:8px;">Run the installer</h4>
+        <div class="install-box" style="margin-bottom:12px;">
+          <div class="install-header">
+            <div class="traffic-light tl-red"></div>
+            <div class="traffic-light tl-yellow"></div>
+            <div class="traffic-light tl-green"></div>
+            <span style="font-size:.8rem;color:var(--text-muted);margin-left:8px;">PowerShell — new window</span>
+          </div>
+          <div class="install-body">
+            <span class="cmd-comment"># Allow local scripts to run (one-time)</span><br>
+            <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force</span><br>
+            <br>
+            <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">& "$env:USERPROFILE\Downloads\install.ps1"</span>
+          </div>
+        </div>
+        <p style="color:var(--text-muted);font-size:.82rem;margin-bottom:6px;">The installer will:</p>
+        <ul style="color:var(--text-muted);font-size:.82rem;padding-left:20px;line-height:2.2;">
+          <li>Install <a href="https://obsidian.md">Obsidian</a> if missing — <strong style="color:var(--text);">pauses</strong> so you can create a vault before continuing</li>
+          <li>Ask for your vault path (default: <code>Documents\Obsidian Vault</code>)</li>
+          <li>Create <code>Inbox/</code>, <code>Notes/</code>, and <code>Capture.md</code></li>
+          <li>Generate a secure auth token</li>
+          <li>Register the MCP server — <strong style="color:var(--text);">first run downloads the package (~10s)</strong>, this is normal</li>
+        </ul>
       </div>
-      <div style="display:flex;gap:12px;align-items:center;">
-        <span style="color:#86efac;font-weight:700;">⑤</span>
-        <span>Generate a secure auth token saved as a user environment variable</span>
-      </div>
-      <div style="display:flex;gap:12px;align-items:center;">
-        <span style="color:#86efac;font-weight:700;">⑥</span>
-        <span>Register the MCP server with Claude Code — tools are live immediately</span>
+    </div>
+
+    <!-- Step 4 -->
+    <div style="display:flex;gap:16px;align-items:flex-start;max-width:640px;">
+      <div style="background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.4);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#86efac;flex-shrink:0;margin-top:2px;">4</div>
+      <div style="width:100%;">
+        <h4 style="margin-bottom:8px;">Verify — open a new terminal</h4>
+        <p style="color:var(--text-muted);font-size:.82rem;margin-bottom:10px;">The installer set environment variables that only load in a <strong style="color:var(--text);">new</strong> terminal window.</p>
+        <div class="install-box" style="margin-bottom:12px;">
+          <div class="install-header">
+            <div class="traffic-light tl-red"></div>
+            <div class="traffic-light tl-yellow"></div>
+            <div class="traffic-light tl-green"></div>
+            <span style="font-size:.8rem;color:var(--text-muted);margin-left:8px;">PowerShell — new window</span>
+          </div>
+          <div class="install-body">
+            <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">claude</span><br>
+            <span class="cmd-comment"># inside Claude, run:</span><br>
+            <span class="cmd-prompt">&gt;</span><span class="cmd-text">/mcp</span><br>
+            <span class="cmd-comment"># ✓ you should see: obsidian — 14 tools</span><br>
+            <span class="cmd-comment"># ✗ if 0 tools: exit Claude and run claude again</span>
+          </div>
+        </div>
+        <p style="color:var(--text-muted);font-size:.82rem;">Run <code>/mcp</code> every time you start a new Claude session to confirm the vault is connected.</p>
       </div>
     </div>
   </div>

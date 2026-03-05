@@ -26,10 +26,21 @@ $CLOUDFLARED = "C:\Program Files (x86)\cloudflared\cloudflared.exe"
 $CF_LOG      = "$env:TEMP\obsidian-mcp-cf.log"
 $SERVER_SCRIPT = "$PSScriptRoot\dist\index.js"
 
-# 1. Start cloudflared
+# 1. Check / install cloudflared
 if (-not (Test-Path $CLOUDFLARED)) {
-    Write-Error "cloudflared not found. Install: winget install Cloudflare.cloudflared"
-    exit 1
+    Write-Host "  cloudflared not found." -ForegroundColor Yellow
+    $installCf = Read-Host "  Install cloudflared now via winget? [Y/n]"
+    if ($installCf -notmatch '^[Nn]') {
+        winget install --id Cloudflare.cloudflared -e --accept-source-agreements --accept-package-agreements
+        if (-not (Test-Path $CLOUDFLARED)) {
+            Write-Error "cloudflared still not found after install. Check path: $CLOUDFLARED"
+            exit 1
+        }
+        Write-Host "  ✓ cloudflared installed" -ForegroundColor Green
+    } else {
+        Write-Error "cloudflared is required for Codespace mode. Install it with: winget install Cloudflare.cloudflared"
+        exit 1
+    }
 }
 
 # Kill any leftover processes from previous runs

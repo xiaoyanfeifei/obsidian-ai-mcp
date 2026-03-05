@@ -43,39 +43,73 @@ GitHub Codespace → Cloudflare tunnel → localhost:PORT → vault on disk
 
 ---
 
-## Quick install (Windows)
+## Install (Windows)
 
-Requires [Node.js 18+](https://nodejs.org) and [Claude Code](https://claude.ai/code).
+> **Early access:** Email xiaoyanfeifei@users.noreply.github.com to request access. You'll be added to the private repo and can download `install.ps1` from there.
+
+### Step 1 — Install prerequisites
+
+These must be installed **before** running the installer:
+
+| Tool | Install |
+|------|---------|
+| Node.js 18+ | [nodejs.org](https://nodejs.org) — download and run the installer |
+| Claude Code CLI | [claude.ai/code](https://claude.ai/code) — follow the setup instructions |
+
+After installing both, **open a new PowerShell window** so they're on your PATH.
+
+### Step 2 — Download install.ps1
+
+Once you have repo access:
+1. Go to `github.com/xiaoyanfeifei/obsidian-ai-mcp`
+2. Click `install.ps1`
+3. Click **Raw** → right-click → **Save As** → save to your `Downloads` folder
+
+### Step 3 — Run the installer
+
+In PowerShell:
 
 ```powershell
-iex (irm https://raw.githubusercontent.com/yanfeiliu/obsidian-ai-mcp/main/install.ps1)
+# Allow local scripts to run (one-time, safe to run)
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
+
+# Run the installer
+& "$env:USERPROFILE\Downloads\install.ps1"
 ```
 
 The installer will:
-1. Ask for your vault path
-2. Set `OBSIDIAN_VAULT` as a permanent user environment variable
-3. Set up the `Inbox/` and `Notes/` folder structure (or migrate existing notes)
-4. Register the MCP server with Claude Code
+1. **Install Obsidian** if not found — then pause and walk you through creating a vault before continuing
+2. **Ask for your vault path** — defaults to `Documents\Obsidian Vault`
+3. **Create `Inbox/`, `Notes/`, and `Capture.md`** in your vault
+4. **Generate a secure auth token** and save it as an environment variable
+5. **Register the MCP server** with Claude Code — first run downloads the package (~10 seconds)
 
-Then start `claude` and run `/mcp` to confirm the tools are connected.
+### Step 4 — Verify it works
+
+**Open a new PowerShell window** (required — the installer set environment variables that need a fresh terminal), then:
+
+```powershell
+claude
+```
+
+Inside Claude, run:
+```
+/mcp
+```
+
+You should see `obsidian` listed with **14 tools connected**. If you see 0 tools, exit Claude and run it again.
+
+**Do the `/mcp` check every time you start a new Claude session** — it confirms the vault connection is live before you start working.
 
 ---
 
-## Manual setup
+## Manual setup (skip the installer)
 
-### Local (stdio)
+### Local (stdio) — Windows only
 
 ```powershell
-# Windows
 claude mcp add obsidian `
   --env "OBSIDIAN_VAULT=C:\Users\you\Documents\MyVault" `
-  -- npx -y obsidian-ai-mcp
-```
-
-```bash
-# macOS / Linux
-claude mcp add obsidian \
-  --env "OBSIDIAN_VAULT=/path/to/your/vault" \
   -- npx -y obsidian-ai-mcp
 ```
 

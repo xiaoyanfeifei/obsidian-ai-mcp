@@ -121,11 +121,30 @@ if (-not $inboxExists -and -not $notesExists) {
         $inboxReadme = @"
 # Inbox
 
-This folder is the staging area for AI-generated notes.
+This is the staging area for AI-generated notes. Everything Claude creates lands here first — review it, then promote to Notes/ when ready.
 
-All new notes created by Claude land here first, with a date prefix:
+## How to use Claude with this vault
 
-    YYYY-MM-DD - Type - Topic.md
+**Start every session:**
+``````
+claude
+/mcp
+``````
+You should see ``obsidian`` listed with 14 tools connected. If it shows 0 tools, exit and re-run ``claude``.
+
+**Quick captures** (tasks, thoughts, reminders) go to ``Capture.md`` automatically:
+- "add a task: review the PR"
+- "note that the API rate limit is 100 req/min"
+- "remind me to follow up with the team this week"
+
+**Structured notes** are created in this folder:
+- "create a devlog for today's auth work"
+- "create a spec for the caching layer"
+- "log my 2pm meeting with the team"
+
+**Promote to permanent notes** when ready:
+- "promote my devlog from today"
+- "what's in my inbox?"
 
 ## Note types
 
@@ -138,20 +157,24 @@ All new notes created by Claude land here first, with a date prefix:
 | meeting | Daily meeting log (one file per day) |
 | decision | Architecture Decision Records |
 
-## Workflow
-
-1. Claude creates and updates notes here during your session
-2. Review the draft when you're ready
-3. Use ``promote_note`` to move it to ``Notes/`` as a permanent note
-4. The Inbox draft is deleted after promotion
-
 ## Special files
 
-- ``Capture.md`` — quick scratch pad; new entries go to the top
+- ``Capture.md`` — quick scratch pad; tasks and short notes go here, newest at top
 - ``README.md`` — this file; never deleted or promoted
 "@
         $inboxReadme | Set-Content -Path (Join-Path $inboxPath "README.md") -Encoding UTF8
-        Write-Host "  ✓ Vault structure created (Inbox/ + Notes/)" -ForegroundColor Green
+
+        $captureContent = @"
+# Capture
+
+Quick tasks, notes, and thoughts. Newest entries at the top.
+Claude adds a date to every entry so you always know when it was captured.
+
+---
+
+"@
+        $captureContent | Set-Content -Path (Join-Path $inboxPath "Capture.md") -Encoding UTF8
+        Write-Host "  ✓ Vault structure created (Inbox/ + Notes/ + Capture.md)" -ForegroundColor Green
     }
 } elseif ($rootMdFiles.Count -gt 0) {
     # Existing vault with notes at the root — offer to migrate
@@ -190,11 +213,30 @@ All new notes created by Claude land here first, with a date prefix:
             $inboxReadme = @"
 # Inbox
 
-This folder is the staging area for AI-generated notes.
+This is the staging area for AI-generated notes. Everything Claude creates lands here first — review it, then promote to Notes/ when ready.
 
-All new notes created by Claude land here first, with a date prefix:
+## How to use Claude with this vault
 
-    YYYY-MM-DD - Type - Topic.md
+**Start every session:**
+``````
+claude
+/mcp
+``````
+You should see ``obsidian`` listed with 14 tools connected. If it shows 0 tools, exit and re-run ``claude``.
+
+**Quick captures** (tasks, thoughts, reminders) go to ``Capture.md`` automatically:
+- "add a task: review the PR"
+- "note that the API rate limit is 100 req/min"
+- "remind me to follow up with the team this week"
+
+**Structured notes** are created in this folder:
+- "create a devlog for today's auth work"
+- "create a spec for the caching layer"
+- "log my 2pm meeting with the team"
+
+**Promote to permanent notes** when ready:
+- "promote my devlog from today"
+- "what's in my inbox?"
 
 ## Note types
 
@@ -207,20 +249,24 @@ All new notes created by Claude land here first, with a date prefix:
 | meeting | Daily meeting log (one file per day) |
 | decision | Architecture Decision Records |
 
-## Workflow
-
-1. Claude creates and updates notes here during your session
-2. Review the draft when you're ready
-3. Use ``promote_note`` to move it to ``Notes/`` as a permanent note
-4. The Inbox draft is deleted after promotion
-
 ## Special files
 
-- ``Capture.md`` — quick scratch pad; new entries go to the top
+- ``Capture.md`` — quick scratch pad; tasks and short notes go here, newest at top
 - ``README.md`` — this file; never deleted or promoted
 "@
             $inboxReadme | Set-Content -Path (Join-Path $inboxPath "README.md") -Encoding UTF8
-            Write-Host "  ✓ Created Inbox/ with README" -ForegroundColor Green
+
+            $captureContent = @"
+# Capture
+
+Quick tasks, notes, and thoughts. Newest entries at the top.
+Claude adds a date to every entry so you always know when it was captured.
+
+---
+
+"@
+            $captureContent | Set-Content -Path (Join-Path $inboxPath "Capture.md") -Encoding UTF8
+            Write-Host "  ✓ Created Inbox/ with README and Capture.md" -ForegroundColor Green
         }
     }
 } else {
@@ -320,17 +366,29 @@ claude mcp add obsidian `
     -- npx -y obsidian-ai-mcp
 
 Write-Host ""
-Write-Host "  ✓ Done!" -ForegroundColor Green
+Write-Host "  ✓ Done! obsidian-ai-mcp is installed." -ForegroundColor Green
 Write-Host ""
-Write-Host "  ──────────────────────────────────────────" -ForegroundColor Yellow
-Write-Host "  Next steps:" -ForegroundColor Yellow
+Write-Host "  ════════════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host "  Getting started" -ForegroundColor Cyan
+Write-Host "  ════════════════════════════════════════════════════" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "    1. Start Claude:  claude" -ForegroundColor White
-Write-Host "    2. Verify tools:  /mcp" -ForegroundColor White
+Write-Host "  IMPORTANT: Open a new terminal before running Claude" -ForegroundColor Yellow
+Write-Host "  (so the new environment variables are loaded)"
 Write-Host ""
-Write-Host "  Try asking Claude:" -ForegroundColor Gray
+Write-Host "  Every time you start Claude:" -ForegroundColor White
+Write-Host "    1. Run:  claude" -ForegroundColor White
+Write-Host "    2. Run:  /mcp" -ForegroundColor White
+Write-Host "       You should see 'obsidian' with 14 tools connected." -ForegroundColor Gray
+Write-Host "       If you see 0 tools — exit and re-run 'claude'." -ForegroundColor Gray
+Write-Host ""
+Write-Host "  Try these to get started:" -ForegroundColor White
 Write-Host "    what's in my vault?" -ForegroundColor Gray
+Write-Host "    add a task: [something you need to do]" -ForegroundColor Gray
 Write-Host "    create a devlog for today's work" -ForegroundColor Gray
 Write-Host "    show my open tasks" -ForegroundColor Gray
-Write-Host "  ──────────────────────────────────────────" -ForegroundColor Yellow
+Write-Host ""
+Write-Host "  Your vault: $vaultPath" -ForegroundColor Gray
+Write-Host "  Inbox README: explains all note types and commands" -ForegroundColor Gray
+Write-Host ""
+Write-Host "  ════════════════════════════════════════════════════" -ForegroundColor Cyan
 Write-Host ""
