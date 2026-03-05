@@ -51,6 +51,8 @@ Type and topic are inferred from the filename if not provided explicitly.
 
 CAPTURE-FIRST RULE: For quick tasks, short notes, or anything the user hasn't explicitly asked to put in a specific note — use append_to_note on the capture file (Inbox/Capture.md) with position="top" instead. Only use write_note when creating or fully rewriting a structured note.
 
+WIKILINK RULE: Before using any [[wikilink]], call list_notes to verify the exact filename of the target note. Use the exact base filename without extension as the link text. Never guess a wikilink name — a wrong name creates a new empty file in Obsidian instead of linking to the existing note.
+
 WRITING STYLE — personal notes written for quick re-reading and thinking, not for an audience:
 1. Big picture first — one sentence on what this is and why it matters
 2. Source is first-class — attribute every claim; open with a source banner for notes from external sources
@@ -105,6 +107,8 @@ Resolve relative time expressions to actual dates at write time:
 Never leave relative time unresolved — the reader needs to know what week it was when captured.
 
 STRUCTURED NOTES RULE: Only write to a specific permanent note when the user explicitly asks (e.g. "add this to Current Works", "update my spec"). When doing so, read the note first to understand its structure (headings, sections) and insert content in the correct section — never blindly append to the end.
+
+WIKILINK RULE: Before using any [[wikilink]], call list_notes to verify the exact filename of the target note. Use the exact base filename without extension as the link text (e.g. if the file is "Current Works.md", write [[Current Works]]). Never guess a wikilink name — a wrong name creates a new empty file in Obsidian instead of linking to the existing note.
 
 INBOX-FIRST RULE: New files created via this tool go to Inbox/ unless a folder is specified.
 Existing files are updated in place wherever they are in the vault.`,

@@ -30,7 +30,9 @@ Custom types defined in vault.config.yaml are also available — check vault_sum
 
 File is created at: Inbox/YYYY-MM-DD - Type - Topic.md
 
-Follow any writing style preferences found in vault_summary → user_preferences.`,
+Follow any writing style preferences found in vault_summary → user_preferences.
+
+WIKILINK RULE: Before using any [[wikilink]], call list_notes to verify the exact filename of the target note. Use the exact base filename without extension. Never guess a wikilink name — a wrong name creates a new empty file in Obsidian.`,
   inputSchema: {
     type: 'object',
     properties: {
