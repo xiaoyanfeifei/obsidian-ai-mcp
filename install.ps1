@@ -22,7 +22,41 @@ if ($nodeMajor -lt 18) {
 }
 Write-Host "  ✓ Node.js v$nodeVersion" -ForegroundColor Green
 
-# ── 2. Check Claude Code CLI ──────────────────────────────────────────────────
+# ── 2. Check / install Obsidian ───────────────────────────────────────────────
+
+Write-Host "  Obsidian is the app you'll use to browse and edit your notes." -ForegroundColor Gray
+Write-Host "  (The MCP server reads .md files directly — Obsidian doesn't need to be running.)" -ForegroundColor Gray
+Write-Host ""
+
+$obsidianInstalled = (Get-Command Obsidian -ErrorAction SilentlyContinue) -or `
+    (Test-Path "$env:LOCALAPPDATA\Obsidian\Obsidian.exe") -or `
+    (winget list --id Obsidian.Obsidian -e 2>$null | Select-String "Obsidian")
+
+if ($obsidianInstalled) {
+    Write-Host "  ✓ Obsidian" -ForegroundColor Green
+} else {
+    Write-Host "  Obsidian not found." -ForegroundColor Yellow
+    $installObsidian = Read-Host "  Install Obsidian now via winget? [Y/n]"
+    if ($installObsidian -notmatch '^[Nn]') {
+        winget install --id Obsidian.Obsidian -e --accept-source-agreements --accept-package-agreements
+        Write-Host ""
+        Write-Host "  ✓ Obsidian installed." -ForegroundColor Green
+        Write-Host ""
+        Write-Host "  ┌─ Next: create your vault in Obsidian ──────────────────────────────┐" -ForegroundColor Yellow
+        Write-Host "  │  1. Open Obsidian                                                   │" -ForegroundColor Yellow
+        Write-Host "  │  2. Click 'Create new vault'                                        │" -ForegroundColor Yellow
+        Write-Host "  │  3. Choose a folder (e.g. Documents\MyVault)                        │" -ForegroundColor Yellow
+        Write-Host "  │  4. Come back here and press Enter to continue                      │" -ForegroundColor Yellow
+        Write-Host "  └─────────────────────────────────────────────────────────────────────┘" -ForegroundColor Yellow
+        Write-Host ""
+        Read-Host "  Press Enter when your vault is ready"
+    } else {
+        Write-Host "  Skipping Obsidian install. You can install it later from https://obsidian.md" -ForegroundColor Gray
+        Write-Host "  The MCP server will still work — Obsidian is just the UI for browsing notes." -ForegroundColor Gray
+    }
+}
+
+# ── 3. Check Claude Code CLI ──────────────────────────────────────────────────
 
 if (-not (Get-Command claude -ErrorAction SilentlyContinue)) {
     Write-Error "Claude Code CLI not found. Install it first: https://claude.ai/code"
@@ -30,7 +64,7 @@ if (-not (Get-Command claude -ErrorAction SilentlyContinue)) {
 }
 Write-Host "  ✓ Claude Code CLI" -ForegroundColor Green
 
-# ── 3. Vault path ─────────────────────────────────────────────────────────────
+# ── 4. Vault path ─────────────────────────────────────────────────────────────
 
 Write-Host ""
 Write-Host "  Where is your Obsidian vault?" -ForegroundColor Yellow
@@ -59,13 +93,13 @@ if (-not (Test-Path $vaultPath)) {
 
 Write-Host "  ✓ Vault: $vaultPath" -ForegroundColor Green
 
-# ── 4. Set OBSIDIAN_VAULT as permanent user environment variable ───────────────
+# ── 5. Set OBSIDIAN_VAULT as permanent user environment variable ───────────────
 
 [System.Environment]::SetEnvironmentVariable("OBSIDIAN_VAULT", $vaultPath, "User")
 $env:OBSIDIAN_VAULT = $vaultPath
 Write-Host "  ✓ OBSIDIAN_VAULT saved as user environment variable" -ForegroundColor Green
 
-# ── 5. Scaffold or migrate vault structure ────────────────────────────────────
+# ── 6. Scaffold or migrate vault structure ────────────────────────────────────
 
 $inboxPath = Join-Path $vaultPath "Inbox"
 $notesPath = Join-Path $vaultPath "Notes"
@@ -193,7 +227,19 @@ All new notes created by Claude land here first, with a date prefix:
     Write-Host "  ✓ Vault structure looks good" -ForegroundColor Green
 }
 
-# ── 6. Write vault.config.yaml if not present ────────────────────────────────
+# ── 7. Generate auth token (for Codespace / HTTP transport) ──────────────────
+
+$existingToken = [System.Environment]::GetEnvironmentVariable("MCP_AUTH_TOKEN", "User")
+if (-not $existingToken) {
+    $token = -join ((48..57) + (97..122) | Get-Random -Count 32 | ForEach-Object { [char]$_ })
+    [System.Environment]::SetEnvironmentVariable("MCP_AUTH_TOKEN", $token, "User")
+    $env:MCP_AUTH_TOKEN = $token
+    Write-Host "  ✓ Auth token generated and saved as MCP_AUTH_TOKEN" -ForegroundColor Green
+} else {
+    Write-Host "  ✓ Auth token already set (MCP_AUTH_TOKEN)" -ForegroundColor Green
+}
+
+# ── 8. Write vault.config.yaml if not present ────────────────────────────────
 
 $configPath = Join-Path $vaultPath "vault.config.yaml"
 if (-not (Test-Path $configPath)) {
@@ -262,7 +308,7 @@ stale_exempt:                 # Files never flagged as stale in vault_review
     Write-Host "  ✓ vault.config.yaml created" -ForegroundColor Green
 }
 
-# ── 6. Register MCP server with Claude Code ───────────────────────────────────
+# ── 9. Register MCP server with Claude Code ───────────────────────────────────
 
 Write-Host ""
 Write-Host "  Registering MCP server..." -ForegroundColor Cyan

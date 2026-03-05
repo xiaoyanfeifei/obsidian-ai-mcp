@@ -12,9 +12,12 @@ $VAULT = if ($env:OBSIDIAN_VAULT) { $env:OBSIDIAN_VAULT } else {
     "C:\path\to\your\vault"  # <-- edit if not using install.ps1
 }
 
-# AUTH_TOKEN: shared secret between this server and your Codespace.
-#             Change to anything secret — anyone with this token can read/write your vault.
-$AUTH_TOKEN  = "obsidian-mcp-2024"  # <-- change this
+# AUTH_TOKEN: reads from MCP_AUTH_TOKEN env var (set by install.ps1 — a random token).
+#             If not set, fall back to a weak default and warn.
+$AUTH_TOKEN = if ($env:MCP_AUTH_TOKEN) { $env:MCP_AUTH_TOKEN } else {
+    Write-Warning "MCP_AUTH_TOKEN env var not set — run install.ps1 first to generate a secure token."
+    "obsidian-mcp-insecure-default"
+}
 
 $PORT        = "3000"
 # $TIMEZONE = "America/New_York"  # Uncomment to override — defaults to system timezone
