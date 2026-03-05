@@ -1,6 +1,6 @@
 {
   "name": "obsidian-ai-mcp",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "MCP server for AI-powered Obsidian vault management — search, write, tasks, and structured Inbox workflow",
   "type": "module",
   "main": "dist/index.js",
