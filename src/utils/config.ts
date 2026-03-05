@@ -15,9 +15,9 @@
  *   - templates (per note type)
  *   - custom_types (additional note types)
  *
- * User preferences (Layer 2 — injected into vault_summary for Claude to read):
- *   Written freely in Inbox/README.md under a "## Preferences" heading (or anywhere).
- *   vault_summary surfaces the README so Claude picks up preferences at session start.
+ * User preferences (Layer 2):
+ *   Place a CLAUDE.md file in the vault root. Claude Code loads it automatically
+ *   at session start — no tool call needed. vault_summary surfaces it too.
  */
 
 import { readFile } from 'fs/promises';
@@ -90,12 +90,11 @@ export function renderTemplate(template: string, params: Record<string, string |
   return template.replace(/\{\{(\w+)\}\}/g, (_, key) => params[key] ?? '');
 }
 
-/** Read Inbox/README.md (the user preferences layer) and return its content, or null */
+/** Read CLAUDE.md from vault root (user preferences layer) and return its content, or null */
 export async function getVaultPreferences(): Promise<string | null> {
   try {
-    const config = await getConfig();
     const vaultPath = getVaultPath();
-    return await readFile(join(vaultPath, config.inbox_folder, 'README.md'), 'utf-8');
+    return await readFile(join(vaultPath, 'CLAUDE.md'), 'utf-8');
   } catch {
     return null;
   }

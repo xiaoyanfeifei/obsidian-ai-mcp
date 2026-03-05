@@ -354,7 +354,41 @@ stale_exempt:                 # Files never flagged as stale in vault_review
     Write-Host "  ✓ vault.config.yaml created" -ForegroundColor Green
 }
 
-# ── 9. Register MCP server with Claude Code ───────────────────────────────────
+# ── 9. Write CLAUDE.md if not present ────────────────────────────────────────
+
+$claudeMdPath = Join-Path $vaultPath "CLAUDE.md"
+if (-not (Test-Path $claudeMdPath)) {
+    $claudeMd = @"
+# Vault preferences
+
+Claude Code loads this file automatically at every session start.
+Edit it to customize how Claude writes and behaves in your vault.
+
+## Writing style
+
+Notes are personal — written for quick re-reading and thinking, not for an audience.
+
+1. **Big picture first.** One sentence: what is this and why does it matter.
+2. **Source is first-class.** Attribute every claim. Open with ``> Source: ...`` for external-source notes.
+3. **Mark confidence.** ⚠️ unverified · ``[repo]`` confirmed in code · ``[teams]`` from conversation.
+4. **Known vs unknown.** Gaps as explicit ``- [ ]`` open questions — not silence.
+5. **Relationships.** Use ``[[wikilinks]]``. Name the people and systems involved.
+6. **Status at a glance.** ✅ / 🔄 / 🔜 for anything with moving parts.
+7. **Next steps.** End with what to do when coming back.
+8. **Minimum length.** Cut anything that doesn't add understanding.
+
+## My preferences
+
+<!-- Add your own preferences below — Claude will follow them every session -->
+- My timezone is (fill in, e.g. America/Los_Angeles)
+"@
+    $claudeMd | Set-Content -Path $claudeMdPath -Encoding UTF8
+    Write-Host "  ✓ CLAUDE.md created — edit it to set your preferences" -ForegroundColor Green
+} else {
+    Write-Host "  ✓ CLAUDE.md already exists" -ForegroundColor Green
+}
+
+# ── 10. Register MCP server with Claude Code ──────────────────────────────────
 
 Write-Host ""
 Write-Host "  Registering MCP server..." -ForegroundColor Cyan

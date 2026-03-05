@@ -308,7 +308,7 @@ These behaviors cannot be overridden — they're safety guarantees:
 
 ### User preferences (Layer 2)
 
-Write freeform preferences in `Inbox/README.md`. Claude reads this file via `vault_summary` at session start and applies your preferences throughout the session — no server changes needed:
+Create a `CLAUDE.md` file in your vault root. Claude Code loads it automatically at every session start — no tool call needed, no reminders required:
 
 ```markdown
 ## My preferences
@@ -318,6 +318,8 @@ Write freeform preferences in `Inbox/README.md`. Claude reads this file via `vau
 - Always link action items back to [[Current Works]]
 - For meeting notes, always include the project tag
 ```
+
+The installer creates a starter `CLAUDE.md` with the writing style principles pre-filled.
 
 ---
 

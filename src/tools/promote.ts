@@ -35,7 +35,7 @@ The permanent note is append-only — existing content is never modified. Frontm
       },
       target: {
         type: 'string',
-        description: 'Permanent destination path outside Inbox, e.g. "Notes/Content Streaming Animation.md" or "Notes/Auth Service/Devlog.md". Created if it does not exist.',
+        description: 'Permanent destination path outside Inbox, e.g. "Notes/Content Streaming Animation.md" or "Notes/Auth Strategy.md". Created if it does not exist.',
       },
       summary: {
         type: 'string',
