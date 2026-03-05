@@ -56,22 +56,13 @@ These must be installed **before** running the installer:
 
 After installing both, **open a new PowerShell window** so they're on your PATH.
 
-### Step 2 — Download install.ps1
+### Step 2 — Run the installer
 
-1. Go to `github.com/xiaoyanfeifei/obsidian-ai-mcp`
-2. Click `install.ps1`
-3. Click **Raw** → right-click → **Save As** → save to your `Downloads` folder
-
-### Step 3 — Run the installer
-
-In PowerShell:
+In PowerShell (one command — no download needed):
 
 ```powershell
-# Allow local scripts to run (one-time, safe to run)
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
-
-# Run the installer
-& "$env:USERPROFILE\Downloads\install.ps1"
+irm https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/install.ps1 | iex
 ```
 
 The installer will:
@@ -81,7 +72,7 @@ The installer will:
 4. **Generate a secure auth token** and save it as an environment variable
 5. **Register the MCP server** with Claude Code — first run downloads the package (~10 seconds)
 
-### Step 4 — Verify it works
+### Step 3 — Verify it works
 
 **Open a new PowerShell window** (required — the installer set environment variables that need a fresh terminal), then:
 
@@ -323,7 +314,7 @@ Write freeform preferences in `Inbox/README.md`. Claude reads this file via `vau
 ## My preferences
 
 - Write devlogs in first person, past tense
-- Auth Service = Microsoft web comments feature; team: Sam, Jordan, Taylor
+- AuthService = the login + token system; team: Sam, Jordan
 - Always link action items back to [[Current Works]]
 - For meeting notes, always include the project tag
 ```
