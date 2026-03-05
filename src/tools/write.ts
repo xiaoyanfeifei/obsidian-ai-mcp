@@ -95,8 +95,9 @@ CAPTURE-FIRST RULE: Unless the user explicitly names a specific note to update, 
 Do NOT create or update permanent notes (e.g. Current Works) for these — use Capture.md.
 
 CAPTURE FORMAT: Every entry written to Capture.md must start with a bold date prefix using today's date.
-- Short entry:  **YYYY-MM-DD** — <content on one line>
-- Long entry:   **YYYY-MM-DD** — <title>\n<body>\n\n---
+- Task/action:  **YYYY-MM-DD** — [ ] <content>
+- Short note:   **YYYY-MM-DD** — <content on one line>
+- Long note:    **YYYY-MM-DD** — <title>\n<body>\n\n---
 Resolve relative time expressions to actual dates at write time:
 - "this week" → "this week (Mon DD – Fri DD)"
 - "next week" → "next week (Mon DD – Fri DD)"
