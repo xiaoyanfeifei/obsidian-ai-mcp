@@ -90,11 +90,11 @@ export function renderTemplate(template: string, params: Record<string, string |
   return template.replace(/\{\{(\w+)\}\}/g, (_, key) => params[key] ?? '');
 }
 
-/** Read CLAUDE.md from vault root (user preferences layer) and return its content, or null */
+/** Read vault_context.md from vault root and return its content, or null */
 export async function getVaultPreferences(): Promise<string | null> {
   try {
     const vaultPath = getVaultPath();
-    return await readFile(join(vaultPath, 'CLAUDE.md'), 'utf-8');
+    return await readFile(join(vaultPath, 'vault_context.md'), 'utf-8');
   } catch {
     return null;
   }

@@ -354,9 +354,11 @@ stale_exempt:                 # Files never flagged as stale in vault_review
     Write-Host "  ✓ vault.config.yaml created" -ForegroundColor Green
 }
 
-# ── 9. Write CLAUDE.md if not present ────────────────────────────────────────
+# ── 9. Write vault_context.md if not present ─────────────────────────────────
+# vault_context.md is read by the MCP server on every tool call and injected
+# into Claude's context automatically — no manual steps needed.
 
-$claudeMdPath = Join-Path $vaultPath "CLAUDE.md"
+$claudeMdPath = Join-Path $vaultPath "vault_context.md"
 if (-not (Test-Path $claudeMdPath)) {
     $claudeMd = @"
 # Vault preferences
@@ -383,9 +385,9 @@ Notes are personal — written for quick re-reading and thinking, not for an aud
 - My timezone is (fill in, e.g. America/Los_Angeles)
 "@
     $claudeMd | Set-Content -Path $claudeMdPath -Encoding UTF8
-    Write-Host "  ✓ CLAUDE.md created — edit it to set your preferences" -ForegroundColor Green
+    Write-Host "  ✓ vault_context.md created — edit it to set your preferences" -ForegroundColor Green
 } else {
-    Write-Host "  ✓ CLAUDE.md already exists" -ForegroundColor Green
+    Write-Host "  ✓ vault_context.md already exists" -ForegroundColor Green
 }
 
 # ── 10. Register MCP server with Claude Code ──────────────────────────────────

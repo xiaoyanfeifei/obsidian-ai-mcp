@@ -308,7 +308,7 @@ These behaviors cannot be overridden — they're safety guarantees:
 
 ### User preferences (Layer 2)
 
-Create a `CLAUDE.md` file in your vault root. Claude Code loads it automatically at every session start — no tool call needed, no reminders required:
+Create a `vault_context.md` file in your vault root. The MCP server reads it at startup and **automatically prepends it to every tool response** — no tool call needed, no reminders required:
 
 ```markdown
 ## My preferences
@@ -319,7 +319,7 @@ Create a `CLAUDE.md` file in your vault root. Claude Code loads it automatically
 - For meeting notes, always include the project tag
 ```
 
-The installer creates a starter `CLAUDE.md` with the writing style principles pre-filled.
+The installer creates a starter `vault_context.md` with the writing style principles pre-filled.
 
 ---
 
