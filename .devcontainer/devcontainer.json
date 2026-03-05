@@ -1,0 +1,8 @@
+{
+  "name": "Obsidian AI MCP",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "postCreateCommand": "npm install && npm run build && .devcontainer/configure-mcp.sh",
+  "remoteEnv": {
+    "OBSIDIAN_VAULT": "${localEnv:OBSIDIAN_VAULT}"
+  }
+}
