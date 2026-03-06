@@ -27,7 +27,7 @@ echo ""
 # ── 2. Prompt for new vault path ──────────────────────────────────────────────
 
 DEFAULT_VAULT="${CURRENT_VAULT:-$HOME/Documents/Obsidian Vault}"
-read -rp "  New vault path [$DEFAULT_VAULT]: " VAULT_INPUT
+read -rp "  New vault path [$DEFAULT_VAULT]: " VAULT_INPUT </dev/tty
 VAULT_PATH="${VAULT_INPUT:-$DEFAULT_VAULT}"
 VAULT_PATH="${VAULT_PATH%\"}"
 VAULT_PATH="${VAULT_PATH#\"}"
@@ -41,7 +41,7 @@ fi
 
 if [[ ! -d "$VAULT_PATH" ]]; then
   echo "  Path not found: $VAULT_PATH"
-  read -rp "  Create it? [Y/n]: " CREATE_IT
+  read -rp "  Create it? [Y/n]: " CREATE_IT </dev/tty
   if [[ "${CREATE_IT:-Y}" =~ ^[Yy] ]]; then
     mkdir -p "$VAULT_PATH"
     echo "  Created: $VAULT_PATH"

@@ -45,7 +45,7 @@ echo "  (The folder containing your .md files — Obsidian does not need to be r
 echo ""
 
 DEFAULT_VAULT="$HOME/Documents/Obsidian Vault"
-read -rp "  Vault path [$DEFAULT_VAULT]: " VAULT_INPUT
+read -rp "  Vault path [$DEFAULT_VAULT]: " VAULT_INPUT </dev/tty
 VAULT_PATH="${VAULT_INPUT:-$DEFAULT_VAULT}"
 # Strip surrounding quotes if user pasted a quoted path
 VAULT_PATH="${VAULT_PATH%\"}"
@@ -53,7 +53,7 @@ VAULT_PATH="${VAULT_PATH#\"}"
 
 if [[ ! -d "$VAULT_PATH" ]]; then
   echo "  Path not found: $VAULT_PATH"
-  read -rp "  Create it? [Y/n]: " CREATE_IT
+  read -rp "  Create it? [Y/n]: " CREATE_IT </dev/tty
   if [[ "${CREATE_IT:-Y}" =~ ^[Yy] ]]; then
     mkdir -p "$VAULT_PATH"
     echo "  Created: $VAULT_PATH"
@@ -93,7 +93,7 @@ NOTES_PATH="$VAULT_PATH/Notes"
 
 if [[ ! -d "$INBOX_PATH" ]] && [[ ! -d "$NOTES_PATH" ]]; then
   echo ""
-  read -rp "  Set up Inbox/ and Notes/ folder structure? [Y/n]: " SCAFFOLD
+  read -rp "  Set up Inbox/ and Notes/ folder structure? [Y/n]: " SCAFFOLD </dev/tty
   if [[ "${SCAFFOLD:-Y}" =~ ^[Yy] ]]; then
     mkdir -p "$INBOX_PATH" "$NOTES_PATH"
 
