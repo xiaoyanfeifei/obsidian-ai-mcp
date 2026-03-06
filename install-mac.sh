@@ -7,6 +7,16 @@
 
 set -e
 
+# When piped via curl | bash, stdin is the pipe so interactive read doesn't work.
+# Detect this and re-exec from a temp file so stdin is the terminal.
+if [ ! -t 0 ]; then
+  TMP=$(mktemp /tmp/obsidian-install-XXXXXX.sh)
+  curl -fsSL "https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/install-mac.sh" -o "$TMP"
+  bash "$TMP"
+  rm -f "$TMP"
+  exit
+fi
+
 echo ""
 echo "  obsidian-ai-mcp — local installer (macOS)"
 echo ""
@@ -45,16 +55,14 @@ echo "  (The folder containing your .md files — Obsidian does not need to be r
 echo ""
 
 DEFAULT_VAULT="$HOME/Documents/Obsidian Vault"
-read -rp "  Vault path [$DEFAULT_VAULT]: " VAULT_INPUT </dev/tty
-VAULT_PATH="${VAULT_INPUT:-$DEFAULT_VAULT}"
+read -rp "  Vault path [$DEFAULT_VAULT]: " VAULT_INPUTVAULT_PATH="${VAULT_INPUT:-$DEFAULT_VAULT}"
 # Strip surrounding quotes if user pasted a quoted path
 VAULT_PATH="${VAULT_PATH%\"}"
 VAULT_PATH="${VAULT_PATH#\"}"
 
 if [[ ! -d "$VAULT_PATH" ]]; then
   echo "  Path not found: $VAULT_PATH"
-  read -rp "  Create it? [Y/n]: " CREATE_IT </dev/tty
-  if [[ "${CREATE_IT:-Y}" =~ ^[Yy] ]]; then
+  read -rp "  Create it? [Y/n]: " CREATE_IT  if [[ "${CREATE_IT:-Y}" =~ ^[Yy] ]]; then
     mkdir -p "$VAULT_PATH"
     echo "  Created: $VAULT_PATH"
   else
@@ -93,8 +101,7 @@ NOTES_PATH="$VAULT_PATH/Notes"
 
 if [[ ! -d "$INBOX_PATH" ]] && [[ ! -d "$NOTES_PATH" ]]; then
   echo ""
-  read -rp "  Set up Inbox/ and Notes/ folder structure? [Y/n]: " SCAFFOLD </dev/tty
-  if [[ "${SCAFFOLD:-Y}" =~ ^[Yy] ]]; then
+  read -rp "  Set up Inbox/ and Notes/ folder structure? [Y/n]: " SCAFFOLD  if [[ "${SCAFFOLD:-Y}" =~ ^[Yy] ]]; then
     mkdir -p "$INBOX_PATH" "$NOTES_PATH"
 
     cat > "$INBOX_PATH/README.md" <<'INBOX_README'
