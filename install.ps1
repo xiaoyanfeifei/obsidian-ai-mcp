@@ -395,12 +395,25 @@ Notes are personal — written for quick re-reading and thinking, not for an aud
 Write-Host ""
 Write-Host "  Registering MCP server..." -ForegroundColor Cyan
 
-try { claude mcp remove obsidian 2>$null | Out-Null } catch { <# not registered yet, that's fine #> }
-$global:LASTEXITCODE = 0
+$claudeJsonPath = "$env:USERPROFILE\.claude.json"
+$mcpEntry = @{
+    type    = "stdio"
+    command = "npx"
+    args    = @("obsidian-ai-mcp@latest")
+    env     = @{ OBSIDIAN_VAULT = $vaultPath }
+}
 
-claude mcp add obsidian `
-    --env "OBSIDIAN_VAULT=$vaultPath" `
-    -- npx -y obsidian-ai-mcp
+if (Test-Path $claudeJsonPath) {
+    $claudeJson = Get-Content $claudeJsonPath -Raw | ConvertFrom-Json
+    if (-not $claudeJson.mcpServers) {
+        $claudeJson | Add-Member -NotePropertyName mcpServers -NotePropertyValue ([PSCustomObject]@{})
+    }
+    $claudeJson.mcpServers | Add-Member -NotePropertyName obsidian -NotePropertyValue $mcpEntry -Force
+    $claudeJson | ConvertTo-Json -Depth 10 | Set-Content $claudeJsonPath -Encoding UTF8
+    Write-Host "  ✓ Registered obsidian MCP server (user scope)" -ForegroundColor Green
+} else {
+    Write-Warning "Could not find $claudeJsonPath — run 'claude' once first, then re-run this installer."
+}
 
 Write-Host ""
 Write-Host "  ✓ Done! obsidian-ai-mcp is installed." -ForegroundColor Green
