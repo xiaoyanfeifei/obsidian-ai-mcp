@@ -17,7 +17,7 @@ Works in two modes:
 
 There are many ways to give an AI access to a note vault. Most just expose the file system. This one makes three opinionated choices:
 
-**Capture first, curate later.** Everything AI-generated lands in `Inbox/` first — never silently inserted into your permanent notes. You review and promote what's worth keeping. This mirrors the capture-before-organise principle from GTD: the friction should live at the curation step, not the capture step.
+**Capture first, curate later.** Everything AI-generated lands in `Inbox/` first — never silently inserted into your permanent notes. You review and promote what's worth keeping. The `promote_note` tool is append-only: it will never overwrite an existing note in `Notes/`, only add to it. This mirrors the capture-before-organise principle from GTD: the friction should live at the curation step, not the capture step.
 
 **Flat by default.** Notes live in two folders: `Inbox/` and `Notes/`. No nested hierarchies to maintain, no taxonomy decisions mid-session. Niklas Luhmann's Zettelkasten worked as a flat collection linked by cross-references — and Andy Matuschak's research on evergreen notes reaches the same conclusion: links and search surface notes better than folders do.
 
