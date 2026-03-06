@@ -13,7 +13,7 @@ set -e
 # When piped via curl | bash, stdin is the pipe so interactive read doesn't work.
 # Detect this and re-exec from a temp file so stdin is the terminal.
 if [ ! -t 0 ]; then
-  TMP=$(mktemp /tmp/obsidian-switch-XXXXXX.sh)
+  TMP=$(mktemp)
   curl -fsSL "https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/switch-vault.sh" -o "$TMP"
   bash "$TMP"
   rm -f "$TMP"
