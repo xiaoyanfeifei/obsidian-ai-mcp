@@ -536,7 +536,7 @@
 
   <div class="hero-badge">✦ MCP Server &nbsp;·&nbsp; 14 Tools &nbsp;·&nbsp; Windows &nbsp;·&nbsp; Mac &nbsp;·&nbsp; Early Stage ✦</div>
 
-  <span class="hero-cat">🐱</span>
+  <canvas id="pixel-cat" width="84" height="120" style="image-rendering:pixelated;image-rendering:crisp-edges;display:block;margin:0 auto 8px;filter:drop-shadow(0 0 12px rgba(168,85,247,0.6));"></canvas>
   <h1>Connect Claude to<br>your Obsidian vault</h1>
   <p>obsidian-ai-mcp is an MCP server that gives Claude direct access to your vault — search, read, write, and manage notes using natural language. Your files stay local, always.</p>
 
@@ -1231,5 +1231,133 @@
   </div>
 </footer>
 
+<!-- ── Pixel cat animation ─────────────────────────────────────────────────── -->
+<script>
+(function () {
+  var c = document.getElementById('pixel-cat');
+  var g = c.getContext('2d');
+  var S = 6; // px per pixel
+
+  // Palette indices
+  var T=0, B=1, L=2, H=3, D=4, K=5, E=6, N=7, R=8, W=9, V=10, Y=11, O=12, G=13;
+  var PAL = [
+    null,        // 0 T transparent
+    '#7c3aed',   // 1 B body purple
+    '#a78bfa',   // 2 L light purple
+    '#c4b5fd',   // 3 H highlight
+    '#1e1b4b',   // 4 D dark outline
+    '#0f0a1a',   // 5 K pupil
+    '#f9a8d4',   // 6 E eye shine / blush
+    '#ff3ea5',   // 7 N nose
+    '#db2777',   // 8 R inner ear pink
+    '#fdf4ff',   // 9 W notepad white
+    '#ddd6fe',   // 10 V notepad line lavender
+    '#fbbf24',   // 11 Y pencil
+    '#f97316',   // 12 O pencil tip
+    '#9333ea',   // 13 G body mid
+  ];
+
+  // 14 cols x 20 rows — cat sitting, holding notepad, writing
+  var F0 = [ // normal — eyes open, pencil raised
+    [T,T,D,L,D,T,T,D,L,D,T,T,T,T],
+    [T,D,L,R,D,T,T,D,R,L,D,T,T,T],
+    [D,L,L,R,L,D,D,L,R,L,L,D,T,T],
+    [D,L,H,L,L,L,L,L,H,L,L,D,T,T],
+    [D,L,K,E,L,L,L,E,K,L,L,D,T,T],
+    [D,L,L,E,L,L,L,E,L,L,L,D,T,T],
+    [D,L,L,L,N,L,L,L,L,L,L,D,T,T],
+    [D,L,L,L,L,L,L,L,L,L,L,D,T,T],
+    [T,D,L,G,G,G,G,G,G,L,D,T,T,T],
+    [T,D,G,G,L,G,G,L,G,G,D,T,T,T],
+    [D,G,G,L,G,G,G,L,G,G,G,D,T,T],
+    [D,G,L,T,W,W,W,T,L,G,D,T,Y,T],
+    [D,G,T,W,W,W,W,W,T,G,D,Y,T,T],
+    [T,D,T,W,V,V,V,W,T,D,Y,T,T,T],
+    [T,T,T,W,V,V,V,W,Y,T,T,T,T,T],
+    [T,T,T,W,W,W,W,W,T,T,T,T,T,T],
+    [T,D,G,B,T,T,T,T,B,G,D,T,T,T],
+    [T,D,L,B,T,T,T,T,B,L,D,T,T,T],
+    [T,T,D,B,D,T,T,D,B,D,T,T,T,T],
+    [T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  ];
+
+  var F1 = [ // writing — pencil down on notepad
+    [T,T,D,L,D,T,T,D,L,D,T,T,T,T],
+    [T,D,L,R,D,T,T,D,R,L,D,T,T,T],
+    [D,L,L,R,L,D,D,L,R,L,L,D,T,T],
+    [D,L,H,L,L,L,L,L,H,L,L,D,T,T],
+    [D,L,K,E,L,L,L,E,K,L,L,D,T,T],
+    [D,L,L,E,L,L,L,E,L,L,L,D,T,T],
+    [D,L,L,L,N,L,L,L,L,L,L,D,T,T],
+    [D,L,L,L,L,L,L,L,L,L,L,D,T,T],
+    [T,D,L,G,G,G,G,G,G,L,D,T,T,T],
+    [T,D,G,G,L,G,G,L,G,G,D,T,T,T],
+    [D,G,G,L,G,G,G,L,G,G,G,D,Y,T],
+    [D,G,L,T,W,W,W,T,L,G,D,Y,T,T],
+    [D,G,T,W,W,W,W,W,T,G,Y,T,T,T],
+    [T,D,T,W,V,V,V,W,Y,D,T,T,T,T],
+    [T,T,T,W,V,O,V,W,T,T,T,T,T,T],
+    [T,T,T,W,W,W,W,W,T,T,T,T,T,T],
+    [T,D,G,B,T,T,T,T,B,G,D,T,T,T],
+    [T,D,L,B,T,T,T,T,B,L,D,T,T,T],
+    [T,T,D,B,D,T,T,D,B,D,T,T,T,T],
+    [T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  ];
+
+  var F2 = [ // blink — eyes closed
+    [T,T,D,L,D,T,T,D,L,D,T,T,T,T],
+    [T,D,L,R,D,T,T,D,R,L,D,T,T,T],
+    [D,L,L,R,L,D,D,L,R,L,L,D,T,T],
+    [D,L,H,L,L,L,L,L,H,L,L,D,T,T],
+    [D,L,D,D,L,L,L,D,D,L,L,D,T,T],
+    [D,L,L,L,L,L,L,L,L,L,L,D,T,T],
+    [D,L,L,L,N,L,L,L,L,L,L,D,T,T],
+    [D,L,L,L,L,L,L,L,L,L,L,D,T,T],
+    [T,D,L,G,G,G,G,G,G,L,D,T,T,T],
+    [T,D,G,G,L,G,G,L,G,G,D,T,T,T],
+    [D,G,G,L,G,G,G,L,G,G,G,D,T,T],
+    [D,G,L,T,W,W,W,T,L,G,D,T,Y,T],
+    [D,G,T,W,W,W,W,W,T,G,D,Y,T,T],
+    [T,D,T,W,V,V,V,W,T,D,Y,T,T,T],
+    [T,T,T,W,V,V,V,W,Y,T,T,T,T,T],
+    [T,T,T,W,W,W,W,W,T,T,T,T,T,T],
+    [T,D,G,B,T,T,T,T,B,G,D,T,T,T],
+    [T,D,L,B,T,T,T,T,B,L,D,T,T,T],
+    [T,T,D,B,D,T,T,D,B,D,T,T,T,T],
+    [T,T,T,T,T,T,T,T,T,T,T,T,T,T],
+  ];
+
+  // Sequence: write, write, write, blink, write, write
+  var SEQ = [F0,F1,F0,F1,F0,F0,F2,F0,F1,F0,F0,F0];
+  var floatY = [0,1,2,2,1,0,-1,-2,-2,-1,0,0];
+  var idx = 0;
+  var last = 0;
+  var INTERVAL = 180;
+
+  function draw(frame, oy) {
+    g.clearRect(0, 0, c.width, c.height);
+    for (var row = 0; row < frame.length; row++) {
+      for (var col = 0; col < frame[row].length; col++) {
+        var ci = frame[row][col];
+        if (ci === T) continue;
+        g.fillStyle = PAL[ci];
+        g.fillRect(col * S, row * S + oy, S, S);
+      }
+    }
+  }
+
+  function animate(ts) {
+    if (ts - last >= INTERVAL) {
+      draw(SEQ[idx], floatY[idx]);
+      idx = (idx + 1) % SEQ.length;
+      last = ts;
+    }
+    requestAnimationFrame(animate);
+  }
+
+  draw(SEQ[0], 0);
+  requestAnimationFrame(animate);
+})();
+</script>
 </body>
 </html>
