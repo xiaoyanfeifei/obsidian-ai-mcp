@@ -47,10 +47,16 @@ echo "  (The folder containing your .md files — Obsidian does not need to be r
 echo ""
 
 DEFAULT_VAULT="$HOME/Documents/Obsidian Vault"
-read -rp "  Vault path [$DEFAULT_VAULT]: " VAULT_INPUTVAULT_PATH="${VAULT_INPUT:-$DEFAULT_VAULT}"
+echo "  Enter the full path, e.g. /Users/$(whoami)/Documents/MyVault"
+echo "  (Do not use ~ — type the full path or press Enter for the default)"
+echo ""
+read -rp "  Vault path [$DEFAULT_VAULT]: " VAULT_INPUT
+VAULT_PATH="${VAULT_INPUT:-$DEFAULT_VAULT}"
 # Strip surrounding quotes if user pasted a quoted path
 VAULT_PATH="${VAULT_PATH%\"}"
 VAULT_PATH="${VAULT_PATH#\"}"
+# Expand ~ in case user typed it anyway
+VAULT_PATH="${VAULT_PATH/#\~/$HOME}"
 
 if [[ ! -d "$VAULT_PATH" ]]; then
   echo "  Path not found: $VAULT_PATH"

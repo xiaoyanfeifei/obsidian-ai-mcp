@@ -27,9 +27,15 @@ echo ""
 # ── 2. Prompt for new vault path ──────────────────────────────────────────────
 
 DEFAULT_VAULT="${CURRENT_VAULT:-$HOME/Documents/Obsidian Vault}"
-read -rp "  New vault path [$DEFAULT_VAULT]: " VAULT_INPUTVAULT_PATH="${VAULT_INPUT:-$DEFAULT_VAULT}"
+echo "  Enter the full path, e.g. /Users/$(whoami)/Documents/MyVault"
+echo "  (Do not use ~ — type the full path or press Enter for the default)"
+echo ""
+read -rp "  New vault path [$DEFAULT_VAULT]: " VAULT_INPUT
+VAULT_PATH="${VAULT_INPUT:-$DEFAULT_VAULT}"
 VAULT_PATH="${VAULT_PATH%\"}"
 VAULT_PATH="${VAULT_PATH#\"}"
+# Expand ~ in case user typed it anyway
+VAULT_PATH="${VAULT_PATH/#\~/$HOME}"
 
 if [[ "$VAULT_PATH" == "$CURRENT_VAULT" ]]; then
   echo "  Already using this vault — nothing to do."
