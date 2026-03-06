@@ -1,46 +1,40 @@
-# Obsidian AI MCP - start server + Cloudflare connection
-# Starts cloudflared first, waits for URL, then starts server with URL baked in.
-# Prints the one-liner to run in Codespace at the end.
+# obsidian-ai-mcp - start server + Cloudflare connection
+# Starts cloudflared first, waits for URL, then starts MCP server.
+# Prints the curl command to run in your Codespace at the end.
+#
+# Reads OBSIDIAN_VAULT and MCP_AUTH_TOKEN from environment (set by install.ps1).
 
 $ErrorActionPreference = "Stop"
 
-# ── Config ────────────────────────────────────────────────────────────────────
-# VAULT: reads from OBSIDIAN_VAULT env var (set by install.ps1).
-#        If not set, edit the fallback path below.
 $VAULT = if ($env:OBSIDIAN_VAULT) { $env:OBSIDIAN_VAULT } else {
-    Write-Warning "OBSIDIAN_VAULT env var not set - run install.ps1 first, or set the path below."
-    "C:\path\to\your\vault"  # <-- edit if not using install.ps1
+    Write-Warning "OBSIDIAN_VAULT not set - run install.ps1 first."
+    "C:\path\to\your\vault"
 }
 
-# AUTH_TOKEN: reads from MCP_AUTH_TOKEN env var (set by install.ps1 - a random token).
-#             If not set, fall back to a weak default and warn.
 $AUTH_TOKEN = if ($env:MCP_AUTH_TOKEN) { $env:MCP_AUTH_TOKEN } else {
-    Write-Warning "MCP_AUTH_TOKEN env var not set - run install.ps1 first to generate a secure token."
+    Write-Warning "MCP_AUTH_TOKEN not set - run install.ps1 first."
     "obsidian-mcp-insecure-default"
 }
 
 $PORT        = "3000"
-# $TIMEZONE = "America/New_York"  # Uncomment to override - defaults to system timezone
 $CLOUDFLARED = "C:\Program Files (x86)\cloudflared\cloudflared.exe"
-# ──────────────────────────────────────────────────────────────────────────────
 $CF_LOG      = "$env:TEMP\obsidian-mcp-cf.log"
-# Use local build if present (dev), otherwise fall back to npx (npm install)
 $LOCAL_SCRIPT = "$PSScriptRoot\dist\index.js"
 $USE_NPX = -not (Test-Path $LOCAL_SCRIPT)
 
 # 1. Check / install cloudflared
 if (-not (Test-Path $CLOUDFLARED)) {
     Write-Host "  cloudflared not found." -ForegroundColor Yellow
-    $installCf = Read-Host "  Install cloudflared now via winget? [Y/n]"
+    $installCf = Read-Host "  Install cloudflared via winget? [Y/n]"
     if ($installCf -notmatch '^[Nn]') {
         winget install --id Cloudflare.cloudflared -e --accept-source-agreements --accept-package-agreements
         if (-not (Test-Path $CLOUDFLARED)) {
-            Write-Error "cloudflared still not found after install. Check path: $CLOUDFLARED"
+            Write-Error "cloudflared still not found. Check path: $CLOUDFLARED"
             exit 1
         }
-        Write-Host "  ✓ cloudflared installed" -ForegroundColor Green
+        Write-Host "  OK cloudflared installed" -ForegroundColor Green
     } else {
-        Write-Error "cloudflared is required for Codespace mode. Install it with: winget install Cloudflare.cloudflared"
+        Write-Error "cloudflared required. Install: winget install Cloudflare.cloudflared"
         exit 1
     }
 }
@@ -56,7 +50,7 @@ $cfProcess = Start-Process $CLOUDFLARED `
     -NoNewWindow -PassThru `
     -RedirectStandardError $CF_LOG
 
-# 2. Wait for tunnel URL (up to 30s)
+# 2. Wait for connection URL (up to 30s)
 $tunnelUrl = $null
 Write-Host "Waiting for connection URL..." -ForegroundColor Cyan
 
@@ -84,7 +78,6 @@ $env:MCP_HTTP_PORT  = $PORT
 $env:MCP_AUTH_TOKEN = $AUTH_TOKEN
 $env:MCP_BASE_URL   = $tunnelUrl
 $env:OBSIDIAN_VAULT = $VAULT
-# MCP_TIMEZONE not set - server auto-detects from system timezone
 
 Write-Host "Starting MCP server on port $PORT..." -ForegroundColor Cyan
 if ($USE_NPX) {
@@ -102,10 +95,8 @@ if ($USE_NPX) {
 Start-Sleep 3
 
 # 4. Health check
-$healthy = $false
 try {
     $resp = Invoke-WebRequest -Uri "http://localhost:$PORT/health" -UseBasicParsing -TimeoutSec 5
-    $healthy = $true
     Write-Host "Server healthy" -ForegroundColor Green
 } catch {
     Write-Warning "Health check failed - server may still be starting."
@@ -119,7 +110,7 @@ Write-Host "======================================================" -ForegroundC
 Write-Host ""
 Write-Host "  curl -s $tunnelUrl/setup.sh | bash" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "  (then start a fresh Claude session)" -ForegroundColor Gray
+Write-Host "  (then: claude -> /mcp -> Authenticate -> fresh session)" -ForegroundColor Gray
 Write-Host "======================================================" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "Ctrl+C to stop." -ForegroundColor Gray
