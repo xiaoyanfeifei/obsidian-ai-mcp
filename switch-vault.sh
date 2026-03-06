@@ -4,14 +4,11 @@
 # Scaffolds Inbox/, Notes/, and starter files if the new vault doesn't have them yet.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/switch-vault.sh | bash
-# Or if you already have it:
+#   curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/switch-vault.sh -o switch-vault.sh
 #   bash switch-vault.sh
 
 set -e
 
-# When piped via curl | bash, stdin is the pipe — redirect to terminal for interactive prompts.
-exec < /dev/tty
 
 echo ""
 echo "  obsidian-ai-mcp — switch vault"

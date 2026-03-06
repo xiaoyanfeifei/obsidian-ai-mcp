@@ -1067,7 +1067,8 @@
               <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">Terminal</span>
             </div>
             <div class="install-body">
-              <span class="cmd-prompt">$</span><span class="cmd-text">curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/install-mac.sh | bash</span>
+              <span class="cmd-prompt">$</span><span class="cmd-text">curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/install-mac.sh -o install-mac.sh</span><br>
+              <span class="cmd-prompt">$</span><span class="cmd-text">bash install-mac.sh</span>
             </div>
           </div>
           <p style="color:var(--text-muted);font-size:.78rem;margin-top:6px;">Asks for your vault path, scaffolds folders, saves env vars to <code>~/.zshrc</code>, and registers the MCP server in <code>~/.claude.json</code>.</p>
@@ -1194,7 +1195,8 @@
             <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">🍎 Terminal (Mac)</span>
           </div>
           <div class="install-body">
-            <span class="cmd-prompt">$</span><span class="cmd-text">curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/switch-vault.sh | bash</span>
+            <span class="cmd-prompt">$</span><span class="cmd-text">curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/switch-vault.sh -o switch-vault.sh</span><br>
+            <span class="cmd-prompt">$</span><span class="cmd-text">bash switch-vault.sh</span>
           </div>
         </div>
         <p style="color:var(--text-muted);font-size:.78rem;margin-top:8px;">Shows your current vault, asks for the new path, scaffolds <code>Inbox/</code>, <code>Notes/</code>, <code>Capture.md</code>, <code>vault.config.yaml</code>, and <code>vault_context.md</code> if missing, then updates everything.</p>

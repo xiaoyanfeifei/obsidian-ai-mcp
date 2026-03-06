@@ -3,12 +3,11 @@
 # Registers the MCP server with Claude Code so your vault is available in every session.
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/install-mac.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/install-mac.sh -o install-mac.sh
+#   bash install-mac.sh
 
 set -e
 
-# When piped via curl | bash, stdin is the pipe — redirect to terminal for interactive prompts.
-exec < /dev/tty
 
 echo ""
 echo "  obsidian-ai-mcp — local installer (macOS)"

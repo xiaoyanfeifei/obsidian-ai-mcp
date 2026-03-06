@@ -112,7 +112,8 @@ Run `/mcp` every time you start a new Claude session to confirm the vault is con
 **Step 2 — Run the installer**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/install-mac.sh | bash
+curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/install-mac.sh -o install-mac.sh
+bash install-mac.sh
 ```
 
 The installer will:
@@ -191,7 +192,8 @@ irm https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/switc
 
 **Mac:**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/switch-vault.sh | bash
+curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/switch-vault.sh -o switch-vault.sh
+bash switch-vault.sh
 ```
 
 Both scripts:
