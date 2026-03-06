@@ -101,13 +101,14 @@ Run `/mcp` every time you start a new Claude session to confirm the vault is con
 
 Claude Code runs in a GitHub Codespace. Your vault lives on your local Windows machine. Since a Codespace can't reach `localhost` directly, `start.ps1` creates a secure Cloudflare connection that gives your Codespace a temporary URL to reach the vault. Nothing is stored; the connection closes when you stop the script.
 
-**Prerequisite:** run the local installer first — it sets `OBSIDIAN_VAULT` and `MCP_AUTH_TOKEN` automatically, so `start.ps1` needs no editing.
+**Prerequisite:** run the local installer first — it sets `OBSIDIAN_VAULT` and `MCP_AUTH_TOKEN` automatically.
 
 **Step 1 — On your local Windows machine**
 
-Run this once and keep it running while you work:
+Download and run `start.ps1` — keep it running while you work in the Codespace:
 
 ```powershell
+irm https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/start.ps1 -OutFile start.ps1
 .\start.ps1
 # prints a curl command when ready — copy it
 ```

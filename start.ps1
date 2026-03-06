@@ -24,7 +24,9 @@ $PORT        = "3000"
 $CLOUDFLARED = "C:\Program Files (x86)\cloudflared\cloudflared.exe"
 # ──────────────────────────────────────────────────────────────────────────────
 $CF_LOG      = "$env:TEMP\obsidian-mcp-cf.log"
-$SERVER_SCRIPT = "$PSScriptRoot\dist\index.js"
+# Use local build if present (dev), otherwise fall back to npx (npm install)
+$LOCAL_SCRIPT = "$PSScriptRoot\dist\index.js"
+$USE_NPX = -not (Test-Path $LOCAL_SCRIPT)
 
 # 1. Check / install cloudflared
 if (-not (Test-Path $CLOUDFLARED)) {
@@ -85,9 +87,17 @@ $env:OBSIDIAN_VAULT = $VAULT
 # MCP_TIMEZONE not set — server auto-detects from system timezone
 
 Write-Host "Starting MCP server on port $PORT..." -ForegroundColor Cyan
-$serverProcess = Start-Process node `
-    -ArgumentList $SERVER_SCRIPT `
-    -NoNewWindow -PassThru
+if ($USE_NPX) {
+    Write-Host "  (using npx obsidian-ai-mcp@latest)" -ForegroundColor Gray
+    $serverProcess = Start-Process npx `
+        -ArgumentList "obsidian-ai-mcp@latest" `
+        -NoNewWindow -PassThru
+} else {
+    Write-Host "  (using local build)" -ForegroundColor Gray
+    $serverProcess = Start-Process node `
+        -ArgumentList $LOCAL_SCRIPT `
+        -NoNewWindow -PassThru
+}
 
 Start-Sleep 3
 

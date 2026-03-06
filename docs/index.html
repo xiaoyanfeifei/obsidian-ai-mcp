@@ -984,13 +984,14 @@
         <div style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(147,51,234,.2));border:1.5px solid rgba(192,132,252,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--lavender);flex-shrink:0;margin-top:2px;">1</div>
         <div style="width:100%;">
           <h4 style="margin-bottom:6px;color:var(--text);">On your local Windows machine</h4>
-          <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:8px;">Run this once — it starts the server and creates the connection. Keep it running while you work in the Codespace.</p>
+          <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:8px;">Download and run — keep it running while you work in the Codespace.</p>
           <div class="install-box">
             <div class="install-header">
               <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
               <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">PowerShell</span>
             </div>
             <div class="install-body">
+              <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">irm https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/start.ps1 -OutFile start.ps1</span><br>
               <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">.\start.ps1</span><br>
               <span class="cmd-comment"># prints a curl command when ready — copy it</span>
             </div>
