@@ -267,9 +267,10 @@ export async function executeAppendToNote(args: unknown) {
 
   await mkdir(dirname(filePath!), { recursive: true });
   const sanitized = await sanitizeWikilinks(vaultPath, input.content);
+  const isCaptureFile = basename(filePath!) === config.capture_file;
   const updated = input.position === 'top'
-    ? prependToContent(existing, sanitized, changeNote)
-    : appendToContent(existing, sanitized, changeNote);
+    ? prependToContent(existing, sanitized, changeNote, isCaptureFile)
+    : appendToContent(existing, sanitized, changeNote, isCaptureFile);
   await writeFile(filePath!, updated, 'utf-8');
 
   return {

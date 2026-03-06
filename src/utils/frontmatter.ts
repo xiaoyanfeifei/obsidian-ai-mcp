@@ -57,6 +57,7 @@ export function appendToContent(
   fileContent: string,
   appendText: string,
   changeNote: string,
+  skipChangeLog = false,
 ): string {
   if (!fileContent.trimStart().startsWith('---')) {
     const sep = fileContent && !fileContent.endsWith('\n') ? '\n' : '';
@@ -66,8 +67,10 @@ export function appendToContent(
   const parsed = matter(fileContent);
   const d = today();
   parsed.data.updated = d;
-  if (!Array.isArray(parsed.data.changes)) parsed.data.changes = [];
-  parsed.data.changes = [...parsed.data.changes, `${d}: ${changeNote}`];
+  if (!skipChangeLog) {
+    if (!Array.isArray(parsed.data.changes)) parsed.data.changes = [];
+    parsed.data.changes = [...parsed.data.changes, `${d}: ${changeNote}`];
+  }
 
   const sep = parsed.content && !parsed.content.endsWith('\n') ? '\n' : '';
   return matter.stringify(parsed.content + sep + appendText, parsed.data);
@@ -82,6 +85,7 @@ export function prependToContent(
   fileContent: string,
   newText: string,
   changeNote: string,
+  skipChangeLog = false,
 ): string {
   if (!fileContent.trimStart().startsWith('---')) {
     return newText + '\n\n' + fileContent;
@@ -90,8 +94,10 @@ export function prependToContent(
   const parsed = matter(fileContent);
   const d = today();
   parsed.data.updated = d;
-  if (!Array.isArray(parsed.data.changes)) parsed.data.changes = [];
-  parsed.data.changes = [...parsed.data.changes, `${d}: ${changeNote}`];
+  if (!skipChangeLog) {
+    if (!Array.isArray(parsed.data.changes)) parsed.data.changes = [];
+    parsed.data.changes = [...parsed.data.changes, `${d}: ${changeNote}`];
+  }
 
   const body = parsed.content;
   const dividerIdx = body.indexOf('\n---\n');

@@ -82,7 +82,7 @@ $env:OBSIDIAN_VAULT = $VAULT
 Write-Host "Starting MCP server on port $PORT..." -ForegroundColor Cyan
 if ($USE_NPX) {
     Write-Host "  (using npx obsidian-ai-mcp@latest)" -ForegroundColor Gray
-    $serverProcess = Start-Process npx `
+    $serverProcess = Start-Process npx.cmd `
         -ArgumentList "obsidian-ai-mcp@latest" `
         -NoNewWindow -PassThru
 } else {

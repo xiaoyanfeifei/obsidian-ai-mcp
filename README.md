@@ -270,9 +270,9 @@ promote_delete_source: true
 
 # Override a built-in note type template
 # Placeholders: {{topic}}, {{date}}, {{time}}, {{context}}
+# Note: no title heading needed — the filename already contains the topic
 templates:
   devlog: |
-    # Devlog: {{topic}}
     **Date:** {{date}}
     {{context}}
 

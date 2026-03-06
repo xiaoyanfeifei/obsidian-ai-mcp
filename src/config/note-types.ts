@@ -41,9 +41,7 @@ export const NOTE_TYPES: Record<NoteType, NoteTypeConfig> = {
     label: 'Devlog',
     folder: 'Inbox',
     extraFields: { task: null, pr_url: null },
-    template: ({ topic, date, time, context, task, pr_url }) => `# Devlog: ${topic}
-
-**Date:** ${date}
+    template: ({ date, time, context, task, pr_url }) => `**Date:** ${date}
 ${task ? `**Task:** ${task}\n` : ''}${pr_url ? `**PR:** ${pr_url}\n` : ''}
 ## Context
 ${context || '<!-- Brief description of what you are working on -->'}
@@ -60,9 +58,7 @@ ${context || '<!-- Brief description of what you are working on -->'}
     label: 'Learning',
     folder: 'Inbox',
     extraFields: { source: null },
-    template: ({ topic, context, source }) => `# ${topic}
-${source ? `\n*Source: ${source}*\n` : ''}
-${context || ''}
+    template: ({ context, source }) => `${source ? `*Source: ${source}*\n\n` : ''}${context || ''}
 
 ## Related notes
 `,
@@ -72,9 +68,7 @@ ${context || ''}
     label: 'Spec',
     folder: 'Inbox',
     extraFields: { feature: null },
-    template: ({ topic, context, feature }) => `# ${feature ? `${feature}: ` : ''}${topic}
-
-## Overview
+    template: ({ context, feature }) => `${feature ? `**Feature:** ${feature}\n\n` : ''}## Overview
 ${context || '<!-- What this is and what problem it solves -->'}
 
 ## Goals
@@ -100,9 +94,7 @@ ${context || '<!-- What this is and what problem it solves -->'}
     label: 'Note',
     folder: 'Inbox',
     extraFields: {},
-    template: ({ topic, context }) => `# ${topic}
-
-> **Source:** <!-- where did this come from? Teams / docs / conversation / repo — and how confident? -->
+    template: ({ context }) => `> **Source:** <!-- where did this come from? Teams / docs / conversation / repo — and how confident? -->
 
 ${context || ''}
 
@@ -140,9 +132,7 @@ ${context || ''}
     label: 'Decision',
     folder: 'Inbox',
     extraFields: { decision_status: 'proposed' },
-    template: ({ topic, context, decision_status }) => `# Decision: ${topic}
-
-**Status:** ${decision_status || 'proposed'}  <!-- proposed | accepted | deprecated | superseded -->
+    template: ({ context, decision_status }) => `**Status:** ${decision_status || 'proposed'}  <!-- proposed | accepted | deprecated | superseded -->
 
 ## Context
 ${context || '<!-- What situation or problem led to this decision? -->'}
