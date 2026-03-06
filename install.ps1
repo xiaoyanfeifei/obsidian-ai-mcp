@@ -94,6 +94,8 @@ if (-not (Test-Path $vaultPath)) {
 Write-Host "  ✓ Vault: $vaultPath" -ForegroundColor Green
 
 # ── 5. Set OBSIDIAN_VAULT as permanent user environment variable ───────────────
+# To switch to a different vault later, run switch-vault.ps1 — it updates only the vault path
+# (env var + .claude.json) without re-running the full installer.
 
 [System.Environment]::SetEnvironmentVariable("OBSIDIAN_VAULT", $vaultPath, "User")
 $env:OBSIDIAN_VAULT = $vaultPath

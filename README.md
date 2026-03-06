@@ -143,6 +143,24 @@ You should see `obsidian` listed with **14 tools connected**.
 
 ---
 
+### Switching vaults
+
+To point the MCP server at a different vault, run `switch-vault.ps1` — it updates both the environment variable and the MCP registration in one step:
+
+```powershell
+irm https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/switch-vault.ps1 | iex
+```
+
+The script will:
+1. Show your current vault
+2. Ask for the new vault path (creates it if it doesn't exist)
+3. Scaffold `Inbox/`, `Notes/`, `Capture.md`, `vault.config.yaml`, and `vault_context.md` if they're missing
+4. Update `OBSIDIAN_VAULT` and `~/.claude.json`
+
+Open a new terminal after running it — changes take effect in the next Claude session.
+
+---
+
 ## Vault structure
 
 The server enforces a two-folder workflow:
