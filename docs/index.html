@@ -534,7 +534,7 @@
     <span>✦</span><span>✧</span><span>✦</span><span>✧</span>
   </div>
 
-  <div class="hero-badge">✦ MCP Server &nbsp;·&nbsp; 14 Tools &nbsp;·&nbsp; Windows &nbsp;·&nbsp; Early Stage ✦</div>
+  <div class="hero-badge">✦ MCP Server &nbsp;·&nbsp; 14 Tools &nbsp;·&nbsp; Windows &nbsp;·&nbsp; Mac &nbsp;·&nbsp; Early Stage ✦</div>
 
   <span class="hero-cat">🐱</span>
   <h1>Connect Claude to<br>your Obsidian vault</h1>
@@ -662,7 +662,7 @@
   <div class="container">
     <div class="section-label">✦ Architecture</div>
     <h2>How it works</h2>
-    <p class="section-intro">The MCP server runs locally on your Windows machine and reads your vault as plain files — no Obsidian app needs to be open.</p>
+    <p class="section-intro">The MCP server runs locally on your machine and reads your vault as plain files — no Obsidian app needs to be open.</p>
 
     <div class="arch-box">
       <span class="hl-purple">Claude</span> (local or Codespace)<br>
@@ -969,22 +969,27 @@
     <p class="section-intro">The setup depends on where Claude Code runs. <strong style="color:var(--text);">Pick your path first</strong> — the steps are different.</p>
 
     <!-- Mode picker -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:620px;margin-bottom:48px;">
-      <a href="#install-local" style="display:block;background:linear-gradient(135deg,rgba(236,72,153,.12),rgba(147,51,234,.08));border:1.5px solid rgba(236,72,153,.45);border-radius:14px;padding:20px;text-decoration:none;">
-        <div style="font-size:22px;margin-bottom:8px;">🖥️</div>
-        <div style="font-weight:800;color:var(--pink-light);margin-bottom:6px;">Local</div>
-        <div style="font-size:.8rem;color:var(--text-muted);">Claude Code and your vault are on the <strong style="color:var(--text);">same Windows machine</strong></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;max-width:760px;margin-bottom:48px;">
+      <a href="#install-local-windows" style="display:block;background:linear-gradient(135deg,rgba(236,72,153,.12),rgba(147,51,234,.08));border:1.5px solid rgba(236,72,153,.45);border-radius:14px;padding:20px;text-decoration:none;">
+        <div style="font-size:22px;margin-bottom:8px;">🪟</div>
+        <div style="font-weight:800;color:var(--pink-light);margin-bottom:6px;">Local — Windows</div>
+        <div style="font-size:.8rem;color:var(--text-muted);">Claude Code and vault on the <strong style="color:var(--text);">same Windows machine</strong></div>
+      </a>
+      <a href="#install-local-mac" style="display:block;background:linear-gradient(135deg,rgba(236,72,153,.12),rgba(147,51,234,.08));border:1.5px solid rgba(236,72,153,.45);border-radius:14px;padding:20px;text-decoration:none;">
+        <div style="font-size:22px;margin-bottom:8px;">🍎</div>
+        <div style="font-weight:800;color:var(--pink-light);margin-bottom:6px;">Local — Mac</div>
+        <div style="font-size:.8rem;color:var(--text-muted);">Claude Code and vault on the <strong style="color:var(--text);">same Mac</strong></div>
       </a>
       <a href="#install-codespace" style="display:block;background:linear-gradient(135deg,rgba(192,132,252,.1),rgba(147,51,234,.06));border:1.5px solid rgba(192,132,252,.4);border-radius:14px;padding:20px;text-decoration:none;">
         <div style="font-size:22px;margin-bottom:8px;">☁️</div>
         <div style="font-weight:800;color:var(--lavender);margin-bottom:6px;">Codespace</div>
-        <div style="font-size:.8rem;color:var(--text-muted);">Claude Code in <strong style="color:var(--text);">GitHub Codespaces</strong>; vault on local Windows machine</div>
+        <div style="font-size:.8rem;color:var(--text-muted);">Claude Code in <strong style="color:var(--text);">GitHub Codespaces</strong>; vault on local machine</div>
       </a>
     </div>
 
-    <!-- ── LOCAL ─────────────────────────────────────────── -->
-    <div id="install-local" style="margin-bottom:52px;">
-      <h3 style="font-size:1.1rem;font-weight:800;color:var(--pink-light);margin-bottom:4px;">🖥️ Local setup</h3>
+    <!-- ── LOCAL WINDOWS ──────────────────────────────────── -->
+    <div id="install-local-windows" style="margin-bottom:52px;">
+      <h3 style="font-size:1.1rem;font-weight:800;color:var(--pink-light);margin-bottom:4px;">🪟 Local setup — Windows</h3>
       <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:24px;">The MCP server runs as a local process — no tunnel, nothing to keep running.</p>
 
       <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:22px;">
@@ -1028,6 +1033,58 @@
             </div>
             <div class="install-body">
               <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">claude</span><br>
+              <span class="cmd-prompt">&gt;</span><span class="cmd-text">/mcp</span><br>
+              <span class="cmd-comment"># ✓ obsidian — 14 tools &nbsp;(if 0: exit and re-run claude)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LOCAL MAC ───────────────────────────────────────── -->
+    <div id="install-local-mac" style="margin-bottom:52px;border-top:1px solid var(--border);padding-top:40px;">
+      <h3 style="font-size:1.1rem;font-weight:800;color:var(--pink-light);margin-bottom:4px;">🍎 Local setup — Mac</h3>
+      <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:24px;">The MCP server runs as a local process — no tunnel, nothing to keep running.</p>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:22px;">
+        <div style="background:linear-gradient(135deg,rgba(236,72,153,.2),rgba(147,51,234,.2));border:1.5px solid rgba(236,72,153,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--pink-light);flex-shrink:0;margin-top:2px;">1</div>
+        <div>
+          <h4 style="margin-bottom:8px;color:var(--text);">Install prerequisites</h4>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:.83rem;"><strong style="color:var(--text);">Node.js 18+</strong> &nbsp;→&nbsp; <code>brew install node</code> &nbsp;or&nbsp; <a href="https://nodejs.org">nodejs.org</a></div>
+            <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:.83rem;"><strong style="color:var(--text);">Claude Code CLI</strong> &nbsp;→&nbsp; <a href="https://claude.ai/code">claude.ai/code</a></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:22px;">
+        <div style="background:linear-gradient(135deg,rgba(236,72,153,.2),rgba(147,51,234,.2));border:1.5px solid rgba(236,72,153,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--pink-light);flex-shrink:0;margin-top:2px;">2</div>
+        <div style="width:100%;">
+          <h4 style="margin-bottom:8px;color:var(--text);">Run the installer</h4>
+          <div class="install-box">
+            <div class="install-header">
+              <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
+              <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">Terminal</span>
+            </div>
+            <div class="install-body">
+              <span class="cmd-prompt">$</span><span class="cmd-text">curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/install-mac.sh | bash</span>
+            </div>
+          </div>
+          <p style="color:var(--text-muted);font-size:.78rem;margin-top:6px;">Asks for your vault path, scaffolds folders, saves env vars to <code>~/.zshrc</code>, and registers the MCP server in <code>~/.claude.json</code>.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;">
+        <div style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(236,72,153,.2));border:1.5px solid rgba(192,132,252,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--lavender);flex-shrink:0;margin-top:2px;">3</div>
+        <div style="width:100%;">
+          <h4 style="margin-bottom:8px;color:var(--text);">Verify — open a new terminal tab</h4>
+          <div class="install-box">
+            <div class="install-header">
+              <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
+              <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">Terminal — new tab</span>
+            </div>
+            <div class="install-body">
+              <span class="cmd-prompt">$</span><span class="cmd-text">claude</span><br>
               <span class="cmd-prompt">&gt;</span><span class="cmd-text">/mcp</span><br>
               <span class="cmd-comment"># ✓ obsidian — 14 tools &nbsp;(if 0: exit and re-run claude)</span>
             </div>
@@ -1121,17 +1178,26 @@
     <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:22px;">
       <div style="background:linear-gradient(135deg,rgba(236,72,153,.2),rgba(147,51,234,.2));border:1.5px solid rgba(236,72,153,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--pink-light);flex-shrink:0;margin-top:2px;">1</div>
       <div style="width:100%;">
-        <h4 style="margin-bottom:8px;color:var(--text);">Run switch-vault.ps1</h4>
-        <div class="install-box">
+        <h4 style="margin-bottom:8px;color:var(--text);">Run the vault switcher for your OS</h4>
+        <div class="install-box" style="margin-bottom:10px;">
           <div class="install-header">
             <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
-            <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">PowerShell</span>
+            <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">🪟 PowerShell (Windows)</span>
           </div>
           <div class="install-body">
             <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">irm https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/switch-vault.ps1 | iex</span>
           </div>
         </div>
-        <p style="color:var(--text-muted);font-size:.78rem;margin-top:8px;">It will show your current vault, ask for the new path, scaffold <code>Inbox/</code>, <code>Notes/</code>, <code>Capture.md</code>, <code>vault.config.yaml</code>, and <code>vault_context.md</code> if missing, then update everything.</p>
+        <div class="install-box">
+          <div class="install-header">
+            <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
+            <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">🍎 Terminal (Mac)</span>
+          </div>
+          <div class="install-body">
+            <span class="cmd-prompt">$</span><span class="cmd-text">curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/switch-vault.sh | bash</span>
+          </div>
+        </div>
+        <p style="color:var(--text-muted);font-size:.78rem;margin-top:8px;">Shows your current vault, asks for the new path, scaffolds <code>Inbox/</code>, <code>Notes/</code>, <code>Capture.md</code>, <code>vault.config.yaml</code>, and <code>vault_context.md</code> if missing, then updates everything.</p>
       </div>
     </div>
 
@@ -1154,6 +1220,7 @@
       <span class="tag">TypeScript</span>
       <span class="tag">MCP SDK</span>
       <span class="tag">Windows</span>
+      <span class="tag">Mac</span>
       <span class="tag">Obsidian</span>
       <span class="tag">Claude Code</span>
       <span class="tag">Cloudflare Tunnel</span>

@@ -51,12 +51,13 @@ GitHub Codespace → Cloudflare tunnel → localhost:PORT → vault on disk
 >
 > | Setup | When to use |
 > |-------|-------------|
-> | **Local** | Claude Code runs on the **same Windows machine** as your vault |
-> | **Codespace** | Claude Code runs in **GitHub Codespaces** and your vault is on a local Windows machine |
+> | **Local — Windows** | Claude Code and your vault are on the same Windows machine |
+> | **Local — Mac** | Claude Code and your vault are on the same Mac |
+> | **Codespace** | Claude Code runs in GitHub Codespaces; vault is on your local machine |
 
 ---
 
-### Local setup (Windows)
+### Local setup — Windows
 
 Claude Code and your vault are on the same machine. The MCP server runs as a local process — no tunnel, no server to keep running.
 
@@ -96,6 +97,42 @@ claude
 You should see `obsidian` listed with **14 tools connected**. If you see 0 tools, exit Claude and run it again.
 
 Run `/mcp` every time you start a new Claude session to confirm the vault is connected.
+
+---
+
+### Local setup — Mac
+
+**Step 1 — Install prerequisites**
+
+| Tool | Install |
+|------|---------|
+| Node.js 18+ | `brew install node` or [nodejs.org](https://nodejs.org) |
+| Claude Code CLI | [claude.ai/code](https://claude.ai/code) |
+
+**Step 2 — Run the installer**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/install-mac.sh | bash
+```
+
+The installer will:
+1. **Ask for your vault path** — defaults to `~/Documents/Obsidian Vault`
+2. **Create `Inbox/`, `Notes/`, and `Capture.md`** in your vault
+3. **Save `OBSIDIAN_VAULT`** to your shell profile (`~/.zshrc` or `~/.bashrc`)
+4. **Generate a secure auth token** (`MCP_AUTH_TOKEN`) in your shell profile
+5. **Register the MCP server** in `~/.claude.json`
+
+**Step 3 — Verify**
+
+Open a **new** terminal tab (so the shell profile changes take effect):
+
+```bash
+claude
+# inside Claude:
+/mcp
+```
+
+You should see `obsidian` listed with **14 tools connected**. If you see 0 tools, exit and run `claude` again.
 
 ---
 
@@ -145,19 +182,25 @@ You should see `obsidian` listed with **14 tools connected**.
 
 ### Switching vaults
 
-To point the MCP server at a different vault, run `switch-vault.ps1` — it updates both the environment variable and the MCP registration in one step:
+To point the MCP server at a different vault, run the switcher for your OS — it updates both the environment variable and the MCP registration in one step, without re-running the full installer.
 
+**Windows:**
 ```powershell
 irm https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/switch-vault.ps1 | iex
 ```
 
-The script will:
+**Mac:**
+```bash
+curl -fsSL https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/switch-vault.sh | bash
+```
+
+Both scripts:
 1. Show your current vault
 2. Ask for the new vault path (creates it if it doesn't exist)
 3. Scaffold `Inbox/`, `Notes/`, `Capture.md`, `vault.config.yaml`, and `vault_context.md` if they're missing
 4. Update `OBSIDIAN_VAULT` and `~/.claude.json`
 
-Open a new terminal after running it — changes take effect in the next Claude session.
+Open a new terminal after running — changes take effect in the next Claude session.
 
 ---
 
