@@ -3,27 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>obsidian-ai-mcp — AI-powered Obsidian vault tools</title>
+  <title>obsidian-ai-mcp — MCP server for your Obsidian vault</title>
   <style>
     :root {
-      --purple:     #7c3aed;
-      --purple-light: #a78bfa;
-      --purple-dark:  #4c1d95;
-      --teal:       #0d9488;
-      --teal-light: #5eead4;
-      --amber:      #d97706;
-      --amber-light:#fcd34d;
-      --rose:       #e11d48;
-      --rose-light: #fda4af;
-      --slate:      #1e293b;
-      --slate-mid:  #334155;
-      --slate-light:#64748b;
-      --bg:         #0f172a;
-      --bg-card:    #1e293b;
-      --bg-card2:   #162032;
-      --text:       #e2e8f0;
-      --text-muted: #94a3b8;
-      --border:     #2d3f55;
+      --purple:       #9333ea;
+      --purple-light: #c084fc;
+      --purple-mid:   #a855f7;
+      --pink:         #ec4899;
+      --pink-light:   #f9a8d4;
+      --pink-hot:     #ff3ea5;
+      --pink-pale:    #fce7f3;
+      --lavender:     #d8b4fe;
+      --bg:           #0d0118;
+      --bg-card:      #180830;
+      --bg-card2:     #1f0a3d;
+      --text:         #f0e6ff;
+      --text-muted:   #c4a8e0;
+      --border:       #3d1a6e;
+      --border-pink:  #7d2257;
+      --glow-purple:  rgba(147,51,234,0.4);
+      --glow-pink:    rgba(236,72,153,0.4);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,12 +34,15 @@
       line-height: 1.7;
     }
 
-    a { color: var(--purple-light); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    a { color: var(--pink-light); text-decoration: none; }
+    a:hover { color: var(--pink-hot); text-decoration: underline; }
+
+    /* ── Sparkle decoration ── */
+    .sparkle { color: var(--pink-light); font-style: normal; }
 
     /* ── Hero ── */
     .hero {
-      background: linear-gradient(135deg, #1a0533 0%, #0f172a 40%, #001a1a 100%);
+      background: linear-gradient(135deg, #1a0040 0%, #0d0118 35%, #2a0040 65%, #1a0030 100%);
       padding: 80px 24px 60px;
       text-align: center;
       border-bottom: 1px solid var(--border);
@@ -50,68 +52,113 @@
     .hero::before {
       content: '';
       position: absolute;
-      top: -120px; left: 50%; transform: translateX(-50%);
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%);
+      top: -100px; left: 30%; transform: translateX(-50%);
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(236,72,153,0.18) 0%, transparent 65%);
       pointer-events: none;
     }
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: -100px; right: 10%;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(147,51,234,0.2) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-stars {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .hero-stars span {
+      position: absolute;
+      font-size: 14px;
+      opacity: 0.6;
+      animation: twinkle 3s ease-in-out infinite;
+    }
+    .hero-stars span:nth-child(1)  { top: 12%; left:  8%; animation-delay: 0s; }
+    .hero-stars span:nth-child(2)  { top: 20%; left: 85%; animation-delay: .7s; }
+    .hero-stars span:nth-child(3)  { top: 65%; left:  5%; animation-delay: 1.2s; }
+    .hero-stars span:nth-child(4)  { top: 75%; left: 92%; animation-delay: .3s; }
+    .hero-stars span:nth-child(5)  { top: 35%; left: 95%; animation-delay: 1.8s; }
+    .hero-stars span:nth-child(6)  { top: 85%; left: 20%; animation-delay: .5s; }
+    .hero-stars span:nth-child(7)  { top: 10%; left: 55%; animation-delay: 2.1s; }
+    .hero-stars span:nth-child(8)  { top: 50%; left: 2%;  animation-delay: 1.5s; }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50%       { opacity: 1;   transform: scale(1.3); }
+    }
+
     .hero-badge {
       display: inline-block;
-      background: rgba(124,58,237,0.2);
-      border: 1px solid rgba(167,139,250,0.4);
-      color: var(--purple-light);
-      padding: 4px 14px;
+      background: linear-gradient(135deg, rgba(236,72,153,0.2), rgba(147,51,234,0.2));
+      border: 1px solid rgba(236,72,153,0.5);
+      color: var(--pink-light);
+      padding: 4px 16px;
       border-radius: 20px;
       font-size: 13px;
-      font-weight: 600;
-      letter-spacing: .04em;
+      font-weight: 700;
+      letter-spacing: .05em;
       margin-bottom: 24px;
+      position: relative;
     }
     .hero h1 {
-      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-size: clamp(2rem, 5vw, 3.4rem);
       font-weight: 800;
       line-height: 1.15;
       margin-bottom: 20px;
-      background: linear-gradient(135deg, #fff 30%, var(--purple-light) 70%, var(--teal-light) 100%);
+      background: linear-gradient(135deg, #fff 20%, var(--pink-light) 50%, var(--purple-light) 80%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      position: relative;
+    }
+    .hero-cat {
+      font-size: 2.4rem;
+      display: block;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 0 12px rgba(236,72,153,0.6));
     }
     .hero p {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       color: var(--text-muted);
       max-width: 580px;
-      margin: 0 auto 36px;
+      margin: 0 auto 32px;
+      position: relative;
     }
     .hero-actions {
       display: flex;
       gap: 12px;
       justify-content: center;
       flex-wrap: wrap;
+      position: relative;
     }
     .btn {
       padding: 12px 28px;
-      border-radius: 8px;
+      border-radius: 999px;
       font-size: 15px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       border: none;
       transition: all .2s;
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      letter-spacing: .02em;
     }
     .btn-primary {
-      background: var(--purple);
+      background: linear-gradient(135deg, var(--pink), var(--purple));
       color: #fff;
+      box-shadow: 0 0 20px var(--glow-pink);
     }
-    .btn-primary:hover { background: #6d28d9; text-decoration: none; }
+    .btn-primary:hover { box-shadow: 0 0 32px var(--glow-pink); transform: translateY(-1px); text-decoration: none; }
     .btn-secondary {
       background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
+      border: 1.5px solid rgba(236,72,153,0.4);
+      color: var(--pink-light);
     }
-    .btn-secondary:hover { border-color: var(--purple-light); color: var(--purple-light); text-decoration: none; }
+    .btn-secondary:hover { border-color: var(--pink); color: var(--pink); box-shadow: 0 0 16px rgba(236,72,153,0.2); text-decoration: none; }
 
     /* ── Layout ── */
     .container {
@@ -127,26 +174,30 @@
     section:last-child { border-bottom: none; }
 
     .section-label {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .1em;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .15em;
       text-transform: uppercase;
-      color: var(--purple-light);
+      color: var(--pink);
       margin-bottom: 10px;
     }
     h2 {
       font-size: clamp(1.5rem, 3vw, 2rem);
-      font-weight: 700;
+      font-weight: 800;
       margin-bottom: 12px;
+      background: linear-gradient(120deg, #fff 40%, var(--lavender));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     .section-intro {
       color: var(--text-muted);
-      font-size: 1.05rem;
+      font-size: 1rem;
       max-width: 640px;
       margin-bottom: 40px;
     }
 
-    /* ── Obsidian intro ── */
+    /* ── Obsidian section ── */
     .obsidian-intro {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -156,70 +207,95 @@
     @media (max-width: 700px) { .obsidian-intro { grid-template-columns: 1fr; } }
 
     .obsidian-card {
-      background: linear-gradient(135deg, #1a0b2e, #0d1f2d);
-      border: 1px solid rgba(124,58,237,0.3);
-      border-radius: 16px;
+      background: linear-gradient(135deg, #2a0845, #180a35);
+      border: 1px solid rgba(192,132,252,0.3);
+      border-radius: 20px;
       padding: 32px;
+      box-shadow: 0 0 40px rgba(147,51,234,0.1);
     }
-    .obsidian-icon {
-      font-size: 48px;
-      margin-bottom: 16px;
-    }
+    .obsidian-icon { font-size: 48px; margin-bottom: 16px; }
     .obsidian-card h3 {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 700;
       margin-bottom: 10px;
-      color: var(--purple-light);
+      color: var(--lavender);
     }
-    .obsidian-card p {
-      color: var(--text-muted);
-      font-size: .95rem;
-      line-height: 1.7;
-    }
-    .obsidian-features {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
+    .obsidian-card p { color: var(--text-muted); font-size: .93rem; line-height: 1.75; }
+
+    .obsidian-features { display: flex; flex-direction: column; gap: 12px; }
     .obsidian-feature {
       display: flex;
       gap: 12px;
       align-items: flex-start;
-      background: var(--bg-card);
+      background: rgba(29,9,64,0.8);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 14px 16px;
+      transition: border-color .2s;
     }
-    .obsidian-feature-icon {
-      font-size: 20px;
-      flex-shrink: 0;
-      margin-top: 2px;
+    .obsidian-feature:hover { border-color: rgba(236,72,153,0.4); }
+    .obsidian-feature-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+    .obsidian-feature-text strong { display: block; font-size: .88rem; margin-bottom: 2px; color: var(--text); }
+    .obsidian-feature-text span   { font-size: .82rem; color: var(--text-muted); }
+
+    /* ── Motivation ── */
+    .motivation-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 40px;
     }
-    .obsidian-feature-text strong {
-      display: block;
-      font-size: .9rem;
-      margin-bottom: 2px;
+    @media (max-width: 700px) { .motivation-cols { grid-template-columns: 1fr; } }
+
+    .motivation-block {
+      border-radius: 16px;
+      padding: 28px;
+      border: 1px solid;
     }
-    .obsidian-feature-text span {
-      font-size: .85rem;
-      color: var(--text-muted);
+    .motivation-block h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
+    .motivation-block p  { font-size: .88rem; color: var(--text-muted); line-height: 1.75; }
+    .motivation-block.problem {
+      background: linear-gradient(135deg, #1f0030, #180a20);
+      border-color: rgba(236,72,153,0.3);
     }
+    .motivation-block.problem h3 { color: var(--pink-light); }
+    .motivation-block.solution {
+      background: linear-gradient(135deg, #1a0840, #0f0530);
+      border-color: rgba(192,132,252,0.35);
+    }
+    .motivation-block.solution h3 { color: var(--lavender); }
+
+    .philosophy-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .philosophy-card {
+      background: linear-gradient(135deg, rgba(147,51,234,0.1), rgba(236,72,153,0.06));
+      border: 1px solid rgba(192,132,252,0.2);
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .philosophy-card:hover { border-color: rgba(236,72,153,0.4); }
+    .philosophy-card .phi-icon { font-size: 24px; margin-bottom: 10px; }
+    .philosophy-card h4 { font-size: .88rem; font-weight: 700; margin-bottom: 6px; color: var(--lavender); }
+    .philosophy-card p  { font-size: .8rem; color: var(--text-muted); }
 
     /* ── How it works ── */
     .arch-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      background: linear-gradient(135deg, #1a0840, #120530);
+      border: 1px solid rgba(192,132,252,0.25);
+      border-radius: 16px;
       padding: 32px;
       font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
       font-size: .85rem;
       line-height: 2;
-      color: #94a3b8;
+      color: var(--text-muted);
       overflow-x: auto;
     }
     .arch-box .hl-purple { color: var(--purple-light); }
-    .arch-box .hl-teal   { color: var(--teal-light); }
-    .arch-box .hl-amber  { color: var(--amber-light); }
+    .arch-box .hl-pink   { color: var(--pink-light); }
+    .arch-box .hl-amber  { color: #fbbf24; }
     .arch-box .hl-green  { color: #86efac; }
 
     /* ── Use cases ── */
@@ -229,47 +305,47 @@
       gap: 20px;
     }
     .usecase-card {
-      border-radius: 14px;
+      border-radius: 18px;
       padding: 28px;
       border: 1px solid transparent;
       position: relative;
       overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
     }
-    .usecase-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      opacity: .07;
-      background: var(--card-color);
-    }
-    .usecase-card.purple { --card-color: var(--purple); background: #1a0b2e; border-color: rgba(124,58,237,.3); }
-    .usecase-card.teal   { --card-color: var(--teal);   background: #071a19; border-color: rgba(13,148,136,.3); }
-    .usecase-card.amber  { --card-color: var(--amber);  background: #1c1200; border-color: rgba(217,119,6,.3); }
-    .usecase-card.rose   { --card-color: var(--rose);   background: #1f0610; border-color: rgba(225,29,72,.3); }
-    .usecase-card.slate  { --card-color: #5e81f4;       background: #0d1630; border-color: rgba(94,129,244,.3); }
-    .usecase-card.green  { --card-color: #22c55e;       background: #071a0e; border-color: rgba(34,197,94,.3); }
+    .usecase-card:hover { transform: translateY(-3px); }
+    .usecase-card.cat1 { background: linear-gradient(135deg,#2a0845,#1a0535); border-color: rgba(192,132,252,.35); }
+    .usecase-card.cat1:hover { box-shadow: 0 8px 32px rgba(147,51,234,.25); }
+    .usecase-card.cat2 { background: linear-gradient(135deg,#2d0840,#1f0535); border-color: rgba(236,72,153,.35); }
+    .usecase-card.cat2:hover { box-shadow: 0 8px 32px rgba(236,72,153,.25); }
+    .usecase-card.cat3 { background: linear-gradient(135deg,#1a0a40,#100535); border-color: rgba(167,139,250,.35); }
+    .usecase-card.cat3:hover { box-shadow: 0 8px 32px rgba(167,139,250,.25); }
+    .usecase-card.cat4 { background: linear-gradient(135deg,#2a0840,#1f0535); border-color: rgba(249,168,212,.3); }
+    .usecase-card.cat4:hover { box-shadow: 0 8px 32px rgba(249,168,212,.2); }
+    .usecase-card.cat5 { background: linear-gradient(135deg,#200840,#150535); border-color: rgba(216,180,254,.3); }
+    .usecase-card.cat5:hover { box-shadow: 0 8px 32px rgba(216,180,254,.2); }
+    .usecase-card.cat6 { background: linear-gradient(135deg,#280a40,#1c0535); border-color: rgba(236,72,153,.3); }
+    .usecase-card.cat6:hover { box-shadow: 0 8px 32px rgba(236,72,153,.2); }
 
-    .usecase-emoji { font-size: 32px; margin-bottom: 14px; }
-    .usecase-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
-    .usecase-card p  { font-size: .88rem; color: var(--text-muted); margin-bottom: 14px; }
+    .usecase-emoji { font-size: 30px; margin-bottom: 12px; }
+    .usecase-card h3 { font-size: 1.02rem; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+    .usecase-card p  { font-size: .86rem; color: var(--text-muted); margin-bottom: 14px; }
 
     .prompt-list { display: flex; flex-direction: column; gap: 6px; }
     .prompt {
-      background: rgba(0,0,0,0.3);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 6px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(192,132,252,0.15);
+      border-radius: 8px;
       padding: 6px 10px;
       font-family: monospace;
-      font-size: .78rem;
-      color: #cbd5e1;
+      font-size: .76rem;
+      color: var(--lavender);
     }
-    .prompt::before { content: '▶ '; color: #475569; }
+    .prompt::before { content: '✦ '; color: var(--pink); font-style: normal; }
 
     /* ── Workflow ── */
     .workflow {
       display: flex;
       align-items: flex-start;
-      gap: 0;
       flex-wrap: wrap;
     }
     .workflow-step {
@@ -280,99 +356,101 @@
       position: relative;
     }
     .workflow-step:not(:last-child)::after {
-      content: '→';
+      content: '✦';
       position: absolute;
-      right: -12px;
-      top: 36px;
-      font-size: 20px;
-      color: var(--text-muted);
+      right: -10px;
+      top: 32px;
+      font-size: 16px;
+      color: var(--pink);
     }
     @media (max-width: 700px) {
       .workflow-step:not(:last-child)::after { display: none; }
     }
     .workflow-num {
-      width: 40px; height: 40px;
+      width: 42px; height: 42px;
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-weight: 800; font-size: 15px;
       margin: 0 auto 12px;
     }
-    .step1 .workflow-num { background: rgba(124,58,237,.25); color: var(--purple-light); border: 1px solid rgba(124,58,237,.4); }
-    .step2 .workflow-num { background: rgba(13,148,136,.25); color: var(--teal-light);   border: 1px solid rgba(13,148,136,.4); }
-    .step3 .workflow-num { background: rgba(217,119,6,.25);  color: var(--amber-light);  border: 1px solid rgba(217,119,6,.4); }
-    .step4 .workflow-num { background: rgba(34,197,94,.25);  color: #86efac;             border: 1px solid rgba(34,197,94,.4); }
-    .workflow-step h4 { font-size: .95rem; font-weight: 700; margin-bottom: 6px; }
+    .step1 .workflow-num { background: rgba(236,72,153,.2);  color: var(--pink-light);   border: 1.5px solid rgba(236,72,153,.5); }
+    .step2 .workflow-num { background: rgba(192,132,252,.2); color: var(--lavender);      border: 1.5px solid rgba(192,132,252,.5); }
+    .step3 .workflow-num { background: rgba(167,139,250,.2); color: var(--purple-light);  border: 1.5px solid rgba(167,139,250,.5); }
+    .step4 .workflow-num { background: rgba(249,168,212,.2); color: var(--pink-light);    border: 1.5px solid rgba(249,168,212,.5); }
+    .workflow-step h4 { font-size: .95rem; font-weight: 700; margin-bottom: 6px; color: var(--text); }
     .workflow-step p  { font-size: .82rem; color: var(--text-muted); }
 
     /* ── Note types ── */
     .notetypes-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
+      gap: 14px;
     }
     .notetype-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 20px;
       border-left: 3px solid var(--accent);
+      transition: border-color .2s, box-shadow .2s;
     }
+    .notetype-card:hover { box-shadow: 0 0 20px rgba(236,72,153,.1); border-color: rgba(236,72,153,.3); }
     .notetype-card .emoji { font-size: 22px; margin-bottom: 8px; }
-    .notetype-card h4 { font-size: .95rem; font-weight: 700; margin-bottom: 4px; color: var(--accent); }
-    .notetype-card p  { font-size: .82rem; color: var(--text-muted); }
-    .nt-devlog   { --accent: var(--purple-light); }
-    .nt-learning { --accent: var(--teal-light); }
-    .nt-spec     { --accent: var(--amber-light); }
-    .nt-meeting  { --accent: #86efac; }
-    .nt-decision { --accent: var(--rose-light); }
-    .nt-note     { --accent: #93c5fd; }
+    .notetype-card h4 { font-size: .92rem; font-weight: 700; margin-bottom: 4px; color: var(--accent); }
+    .notetype-card p  { font-size: .8rem; color: var(--text-muted); }
+    .nt-devlog   { --accent: var(--pink-light); }
+    .nt-learning { --accent: var(--lavender); }
+    .nt-spec     { --accent: var(--purple-light); }
+    .nt-meeting  { --accent: #f9a8d4; }
+    .nt-decision { --accent: #c4b5fd; }
+    .nt-note     { --accent: #fbcfe8; }
 
     /* ── Tools table ── */
     .tools-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: .88rem;
+      font-size: .87rem;
     }
     .tools-table th {
       text-align: left;
       padding: 10px 16px;
-      font-size: .75rem;
-      font-weight: 700;
-      letter-spacing: .06em;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .1em;
       text-transform: uppercase;
-      color: var(--text-muted);
+      color: var(--pink);
       border-bottom: 1px solid var(--border);
     }
     .tools-table td {
       padding: 10px 16px;
-      border-bottom: 1px solid rgba(45,63,85,.5);
+      border-bottom: 1px solid rgba(61,26,110,.5);
       vertical-align: top;
     }
     .tools-table tr:last-child td { border-bottom: none; }
-    .tools-table tr:hover td { background: rgba(124,58,237,.05); }
+    .tools-table tr:hover td { background: rgba(236,72,153,.04); }
     .tool-name {
       font-family: monospace;
-      font-size: .83rem;
+      font-size: .82rem;
       color: var(--purple-light);
       white-space: nowrap;
     }
     .tool-desc { color: var(--text-muted); }
     .badge {
       display: inline-block;
-      font-size: .68rem;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 4px;
+      font-size: .66rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
       letter-spacing: .04em;
     }
-    .badge-read  { background: rgba(13,148,136,.2);  color: var(--teal-light); }
-    .badge-write { background: rgba(124,58,237,.2);  color: var(--purple-light); }
+    .badge-read  { background: rgba(192,132,252,.15); color: var(--lavender);  border: 1px solid rgba(192,132,252,.3); }
+    .badge-write { background: rgba(236,72,153,.15);  color: var(--pink-light); border: 1px solid rgba(236,72,153,.3); }
 
     /* ── Install ── */
     .install-box {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      background: linear-gradient(135deg, #1f0840, #150530);
+      border: 1px solid rgba(192,132,252,0.3);
+      border-radius: 14px;
       overflow: hidden;
     }
     .install-header {
@@ -380,8 +458,8 @@
       align-items: center;
       gap: 8px;
       padding: 12px 18px;
-      background: rgba(0,0,0,.2);
-      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,.25);
+      border-bottom: 1px solid rgba(61,26,110,.8);
     }
     .traffic-light { width: 12px; height: 12px; border-radius: 50%; }
     .tl-red    { background: #ff5f57; }
@@ -390,13 +468,22 @@
     .install-body {
       padding: 20px 24px;
       font-family: monospace;
-      font-size: .9rem;
-      line-height: 1.8;
+      font-size: .88rem;
+      line-height: 1.9;
     }
-    .cmd-comment { color: #475569; }
-    .cmd-text    { color: #e2e8f0; }
-    .cmd-string  { color: #86efac; }
-    .cmd-prompt  { color: var(--purple-light); margin-right: 8px; }
+    .cmd-comment { color: #7c5c9e; }
+    .cmd-text    { color: var(--text); }
+    .cmd-prompt  { color: var(--pink); margin-right: 8px; }
+
+    /* ── Cat dividers ── */
+    .cat-divider {
+      text-align: center;
+      color: var(--pink);
+      font-size: 18px;
+      letter-spacing: 8px;
+      padding: 8px 0 0;
+      opacity: 0.5;
+    }
 
     /* ── Footer ── */
     footer {
@@ -405,17 +492,36 @@
       color: var(--text-muted);
       font-size: .85rem;
       border-top: 1px solid var(--border);
+      background: linear-gradient(180deg, transparent, rgba(147,51,234,0.05));
+    }
+    .footer-cats {
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+      letter-spacing: 4px;
     }
 
     .tag {
       display: inline-block;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 3px 10px;
-      font-size: .78rem;
-      color: var(--text-muted);
+      background: rgba(147,51,234,.15);
+      border: 1px solid rgba(192,132,252,.25);
+      border-radius: 999px;
+      padding: 3px 12px;
+      font-size: .76rem;
+      color: var(--lavender);
       margin: 2px;
+    }
+
+    /* ── Warning box ── */
+    .warn-box {
+      display: inline-block;
+      background: rgba(236,72,153,.1);
+      border: 1px solid rgba(236,72,153,.35);
+      border-radius: 12px;
+      padding: 12px 20px;
+      margin-bottom: 28px;
+      font-size: .86rem;
+      color: var(--pink-light);
+      max-width: 520px;
     }
   </style>
 </head>
@@ -423,12 +529,21 @@
 
 <!-- ── Hero ─────────────────────────────────────────────────────────────────── -->
 <div class="hero">
-  <div class="hero-badge">🚧 Early Stage &nbsp;·&nbsp; MCP Server · 14 Tools · Windows</div>
-  <h1>Your AI assistant,<br>inside your notes</h1>
-  <p>obsidian-ai-mcp connects Claude to your Obsidian vault — search, read, write, and manage notes using natural language. Your files never leave your machine.</p>
-  <div style="display:inline-block;background:rgba(217,119,6,.15);border:1px solid rgba(217,119,6,.4);border-radius:10px;padding:12px 20px;margin-bottom:28px;font-size:.88rem;color:#fcd34d;max-width:520px;">
-    ⚠️ <strong>Early stage.</strong> This tool is under active development. Open source on <a href="https://github.com/xiaoyanfeifei/obsidian-ai-mcp" style="color:#fcd34d;text-decoration:underline;">GitHub</a>.
+  <div class="hero-stars">
+    <span>✦</span><span>✧</span><span>✦</span><span>✧</span>
+    <span>✦</span><span>✧</span><span>✦</span><span>✧</span>
   </div>
+
+  <div class="hero-badge">✦ MCP Server &nbsp;·&nbsp; 14 Tools &nbsp;·&nbsp; Windows &nbsp;·&nbsp; Early Stage ✦</div>
+
+  <span class="hero-cat">🐱</span>
+  <h1>Connect Claude to<br>your Obsidian vault</h1>
+  <p>obsidian-ai-mcp is an MCP server that gives Claude direct access to your vault — search, read, write, and manage notes using natural language. Your files stay local, always.</p>
+
+  <div class="warn-box">
+    ⚠️ <strong>Early stage.</strong> Under active development. Open source on <a href="https://github.com/xiaoyanfeifei/obsidian-ai-mcp" style="color:var(--pink-light);text-decoration:underline;">GitHub</a>.
+  </div>
+
   <div class="hero-actions">
     <a class="btn btn-primary" href="#install">⚡ Get started</a>
     <a class="btn btn-secondary" href="#tools">View all 14 tools →</a>
@@ -438,15 +553,17 @@
 <!-- ── What is Obsidian ───────────────────────────────────────────────────────── -->
 <section id="obsidian">
   <div class="container">
-    <div class="section-label">First things first</div>
+    <div class="section-label">✦ First things first</div>
     <h2>What is Obsidian?</h2>
     <p class="section-intro">Obsidian is a free, local-first note-taking app built around plain Markdown files. Think of it as a personal knowledge base that lives on your machine — no cloud sync required, no vendor lock-in.</p>
 
     <div class="obsidian-intro">
       <div class="obsidian-card">
         <div class="obsidian-icon">🪨</div>
-        <h3>A second brain for engineers</h3>
-        <p>Obsidian lets you build a personal knowledge base of notes, specs, decisions, and logs — all as plain <code>.md</code> files on disk. You connect ideas with <code>[[wikilinks]]</code>, visualise the graph of your knowledge, and search across everything instantly.</p>
+        <h3>A connected knowledge base for engineers</h3>
+        <p>Obsidian lets you build a personal knowledge base of notes, specs, decisions, and logs — all as plain <code>.md</code> files on disk. You connect ideas with <code>[[wikilinks]]</code>, and Obsidian renders them as a graph: a visual map of how your notes relate to each other.</p>
+        <br/>
+        <p>The graph view makes it possible to see, for example, that your auth spec, a debugging session devlog, and a team decision all point to the same architectural note — connections you might not have noticed otherwise.</p>
         <br/>
         <p>Because notes are just files, they work with git, grep, any text editor — and now, with AI tools like Claude.</p>
       </div>
@@ -462,7 +579,7 @@
           <div class="obsidian-feature-icon">🔗</div>
           <div class="obsidian-feature-text">
             <strong>[[Wikilinks]] and graph view</strong>
-            <span>Connect notes to each other and visualise your knowledge as a graph.</span>
+            <span>Connect notes to each other. Obsidian visualises your knowledge as an interactive graph — surface hidden relationships across sessions.</span>
           </div>
         </div>
         <div class="obsidian-feature">
@@ -491,10 +608,59 @@
   </div>
 </section>
 
+<!-- ── Motivation ──────────────────────────────────────────────────────────────── -->
+<section id="motivation">
+  <div class="container">
+    <div class="section-label">✦ Why this exists</div>
+    <h2>The knowledge that disappears 🐾</h2>
+    <p class="section-intro">If you spend your day in Claude — debugging, researching, reviewing code, planning — you know this problem.</p>
+
+    <div class="motivation-cols">
+      <div class="motivation-block problem">
+        <h3>😿 The friction</h3>
+        <p>You ask Claude a question, get a great answer, and move on. Later you can't find it. You write notes after the fact, if at all. Decisions get buried in chat history. Learnings from a debugging session vanish. You copy-paste snippets into a scratch file that never gets organised.</p>
+        <br/>
+        <p>The knowledge is there — it just doesn't go anywhere useful.</p>
+      </div>
+      <div class="motivation-block solution">
+        <h3>😸 What this unlocks</h3>
+        <p>With obsidian-ai-mcp, your vault stays in sync with your work. As you're doing something in Claude, just say "log this" or "create a devlog" and it captures it — structured, dated, linked to your other notes. At the end of a session, ask Claude to summarise and promote it to your permanent notes.</p>
+        <br/>
+        <p>No copy-pasting. No context switching. Your vault grows from your work, not from extra effort.</p>
+      </div>
+    </div>
+
+    <p style="color:var(--text-muted);font-size:.93rem;margin-bottom:24px;">This only works if the notes stay useful. The design intentionally prevents the common failure mode of notes becoming an unreadable wall of AI output:</p>
+
+    <div class="philosophy-row">
+      <div class="philosophy-card">
+        <div class="phi-icon">🎯</div>
+        <h4>Current state, not history</h4>
+        <p>Notes reflect what's true now, not a log of every change. Outdated content gets replaced or promoted away.</p>
+      </div>
+      <div class="philosophy-card">
+        <div class="phi-icon">✂️</div>
+        <h4>Concise by default</h4>
+        <p>Templates are structured and minimal. Every field exists because it adds signal. Nothing is appended just because it can be.</p>
+      </div>
+      <div class="philosophy-card">
+        <div class="phi-icon">📥</div>
+        <h4>Inbox before permanent</h4>
+        <p>All AI-generated notes land in Inbox first. You review and promote — permanent notes are never silently overwritten.</p>
+      </div>
+      <div class="philosophy-card">
+        <div class="phi-icon">🔍</div>
+        <h4>Ready to consume</h4>
+        <p>A note should answer a question when you come back to it. Open questions are explicit. Next steps are always at the bottom.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ── How it works ───────────────────────────────────────────────────────────── -->
 <section id="how">
   <div class="container">
-    <div class="section-label">Architecture</div>
+    <div class="section-label">✦ Architecture</div>
     <h2>How it works</h2>
     <p class="section-intro">The MCP server runs locally on your Windows machine and reads your vault as plain files — no Obsidian app needs to be open.</p>
 
@@ -504,18 +670,18 @@
       &nbsp;&nbsp;"what tasks are open in Current Works?"<br>
       &nbsp;&nbsp;"create a spec for the new auth flow"<br>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;<span class="hl-amber">MCP protocol</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;<span class="hl-pink">MCP protocol</span><br>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
-      &nbsp;&nbsp;<span class="hl-teal">obsidian-ai-mcp</span>&nbsp;&nbsp;←&nbsp;runs on your Windows machine<br>
+      &nbsp;&nbsp;<span class="hl-purple">obsidian-ai-mcp</span>&nbsp;&nbsp;←&nbsp;runs on your Windows machine&nbsp;&nbsp;<span class="hl-pink">🐱</span><br>
       &nbsp;&nbsp;14 vault tools<br>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;<span class="hl-amber">fs/promises (direct file I/O)</span><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;<span class="hl-pink">fs/promises (direct file I/O)</span><br>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼<br>
       &nbsp;&nbsp;<span class="hl-green">Your Obsidian Vault</span>&nbsp;&nbsp;←&nbsp;stays local, always<br>
       &nbsp;&nbsp;(.md files on disk)<br>
       <br>
-      <span style="color:#475569">── Codespace mode ──────────────────────────────────────────</span><br>
-      GitHub Codespace → <span class="hl-amber">Cloudflare tunnel</span> → localhost → vault
+      <span style="color:#4a2a6e">── Codespace mode ──────────────────────────────────────────</span><br>
+      GitHub Codespace → <span class="hl-pink">Cloudflare tunnel</span> → localhost → vault
     </div>
   </div>
 </section>
@@ -523,14 +689,14 @@
 <!-- ── Use cases ──────────────────────────────────────────────────────────────── -->
 <section id="usecases">
   <div class="container">
-    <div class="section-label">Use cases</div>
+    <div class="section-label">✦ Use cases</div>
     <h2>What can you do with it?</h2>
     <p class="section-intro">Just describe what you want in plain English — Claude picks the right tool automatically.</p>
 
     <div class="usecases-grid">
 
-      <div class="usecase-card purple">
-        <div class="usecase-emoji">📋</div>
+      <div class="usecase-card cat1">
+        <div class="usecase-emoji">🛠️</div>
         <h3>Session devlogs</h3>
         <p>Log your work as you go. Claude creates a timestamped devlog, appends entries throughout your session, and summarises at the end.</p>
         <div class="prompt-list">
@@ -540,18 +706,18 @@
         </div>
       </div>
 
-      <div class="usecase-card teal">
+      <div class="usecase-card cat2">
         <div class="usecase-emoji">📝</div>
         <h3>Meeting notes</h3>
         <p>One file per day. Each meeting gets its own section with attendees and action items. Promote individual meetings to project-specific permanent notes.</p>
         <div class="prompt-list">
-          <div class="prompt">log my 10am 1:1 with Sam — we discussed...</div>
+          <div class="prompt">log my 10am 1:1 — we discussed...</div>
           <div class="prompt">add action: draft rate limiting spec by EOW</div>
           <div class="prompt">promote the API review section to Notes/Auth Service</div>
         </div>
       </div>
 
-      <div class="usecase-card amber">
+      <div class="usecase-card cat3">
         <div class="usecase-emoji">📐</div>
         <h3>Design specs</h3>
         <p>Create structured specs with goals, non-goals, design decisions, and open questions. Iterate during implementation and track what changed.</p>
@@ -562,21 +728,21 @@
         </div>
       </div>
 
-      <div class="usecase-card rose">
+      <div class="usecase-card cat4">
         <div class="usecase-emoji">✅</div>
         <h3>Task tracking</h3>
         <p>Find open tasks across your vault, mark them done, and keep action items from meetings connected to your permanent notes.</p>
         <div class="prompt-list">
           <div class="prompt">show all open tasks in Current Works</div>
           <div class="prompt">mark "draft rate limiting spec" as done</div>
-          <div class="prompt">what tasks are overdue from last week?</div>
+          <div class="prompt">what tasks did I not finish last week?</div>
         </div>
       </div>
 
-      <div class="usecase-card slate">
+      <div class="usecase-card cat5">
         <div class="usecase-emoji">🧠</div>
         <h3>Knowledge capture</h3>
-        <p>Quickly capture things you learned — a new API, a debugging insight, a pattern you spotted. Structured learning notes with source and confidence markers.</p>
+        <p>Capture things you learned inline — a new API behaviour, a debugging insight, a pattern you spotted — without leaving your workflow.</p>
         <div class="prompt-list">
           <div class="prompt">I just learned that V8 deoptimises...</div>
           <div class="prompt">create a learning note: CSS container queries</div>
@@ -584,7 +750,7 @@
         </div>
       </div>
 
-      <div class="usecase-card green">
+      <div class="usecase-card cat6">
         <div class="usecase-emoji">🔍</div>
         <h3>Vault review</h3>
         <p>Surface everything that needs attention — stale drafts, open tasks, proposed decisions, specs with unanswered questions, notes missing wikilinks.</p>
@@ -602,7 +768,7 @@
 <!-- ── Workflow ────────────────────────────────────────────────────────────────── -->
 <section id="workflow">
   <div class="container">
-    <div class="section-label">Two-phase workflow</div>
+    <div class="section-label">✦ Two-phase workflow</div>
     <h2>Inbox → Notes</h2>
     <p class="section-intro">All AI-generated notes land in <code>Inbox/</code> first — drafts you can review before they become permanent. When you're happy, promote them to <code>Notes/</code>.</p>
 
@@ -634,7 +800,7 @@
 <!-- ── Note types ─────────────────────────────────────────────────────────────── -->
 <section id="notetypes">
   <div class="container">
-    <div class="section-label">Structured templates</div>
+    <div class="section-label">✦ Structured templates</div>
     <h2>Note types</h2>
     <p class="section-intro">Each type generates the right structure automatically — no blank page, no forgotten fields.</p>
 
@@ -676,11 +842,11 @@
 <!-- ── Tools ──────────────────────────────────────────────────────────────────── -->
 <section id="tools">
   <div class="container">
-    <div class="section-label">Full reference</div>
+    <div class="section-label">✦ Full reference</div>
     <h2>14 tools</h2>
     <p class="section-intro">You never call these directly — Claude picks the right one based on what you ask. But here's what's available.</p>
 
-    <div style="overflow-x:auto; border-radius:12px; border:1px solid var(--border);">
+    <div style="overflow-x:auto; border-radius:16px; border:1px solid var(--border); background: linear-gradient(135deg, #180830, #100520);">
       <table class="tools-table">
         <thead>
           <tr>
@@ -713,41 +879,40 @@
 <!-- ── Install ────────────────────────────────────────────────────────────────── -->
 <section id="install">
   <div class="container">
-    <div class="section-label">Getting started</div>
-    <h2>Install in one command</h2>
+    <div class="section-label">✦ Getting started</div>
+    <h2>Install in one command 🐾</h2>
     <p class="section-intro">Requires Windows, Node.js 18+, and Claude Code CLI. The installer handles everything else — including Obsidian, vault setup, and MCP registration.</p>
-
 
     <!-- Step 1 -->
     <div style="display:flex;gap:16px;align-items:flex-start;max-width:640px;margin-bottom:32px;">
-      <div style="background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--purple-light);flex-shrink:0;margin-top:2px;">1</div>
+      <div style="background:linear-gradient(135deg,rgba(236,72,153,.2),rgba(147,51,234,.2));border:1.5px solid rgba(236,72,153,.5);border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--pink-light);flex-shrink:0;margin-top:2px;">1</div>
       <div>
-        <h4 style="margin-bottom:8px;">Install prerequisites first</h4>
-        <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:10px;">These must be installed <strong style="color:var(--text);">before</strong> running the installer or it will error out.</p>
+        <h4 style="margin-bottom:8px;color:var(--text);">Install prerequisites first</h4>
+        <p style="color:var(--text-muted);font-size:.87rem;margin-bottom:10px;">These must be installed <strong style="color:var(--text);">before</strong> running the installer or it will error out.</p>
         <div style="display:flex;flex-direction:column;gap:6px;">
-          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:.85rem;">
-            <strong>Node.js 18+</strong> &nbsp;→&nbsp; <a href="https://nodejs.org">nodejs.org</a> — download and run the installer
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:.84rem;">
+            <strong style="color:var(--text);">Node.js 18+</strong> &nbsp;→&nbsp; <a href="https://nodejs.org">nodejs.org</a> — download and run the installer
           </div>
-          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:.85rem;">
-            <strong>Claude Code CLI</strong> &nbsp;→&nbsp; <a href="https://claude.ai/code">claude.ai/code</a> — follow the setup instructions
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:.84rem;">
+            <strong style="color:var(--text);">Claude Code CLI</strong> &nbsp;→&nbsp; <a href="https://claude.ai/code">claude.ai/code</a> — follow the setup instructions
           </div>
         </div>
-        <p style="color:var(--text-muted);font-size:.82rem;margin-top:8px;">After installing both, open a <strong style="color:var(--text);">new PowerShell window</strong> so they're on your PATH.</p>
+        <p style="color:var(--text-muted);font-size:.8rem;margin-top:8px;">After installing both, open a <strong style="color:var(--text);">new PowerShell window</strong> so they're on your PATH.</p>
       </div>
     </div>
 
     <!-- Step 2 -->
     <div style="display:flex;gap:16px;align-items:flex-start;max-width:640px;margin-bottom:32px;">
-      <div style="background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--purple-light);flex-shrink:0;margin-top:2px;">2</div>
+      <div style="background:linear-gradient(135deg,rgba(236,72,153,.2),rgba(147,51,234,.2));border:1.5px solid rgba(236,72,153,.5);border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--pink-light);flex-shrink:0;margin-top:2px;">2</div>
       <div style="width:100%;">
-        <h4 style="margin-bottom:8px;">Run the installer</h4>
-        <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:10px;">Paste these two lines in PowerShell — no download needed:</p>
+        <h4 style="margin-bottom:8px;color:var(--text);">Run the installer</h4>
+        <p style="color:var(--text-muted);font-size:.87rem;margin-bottom:10px;">Paste these two lines in PowerShell — no download needed:</p>
         <div class="install-box" style="margin-bottom:12px;">
           <div class="install-header">
             <div class="traffic-light tl-red"></div>
             <div class="traffic-light tl-yellow"></div>
             <div class="traffic-light tl-green"></div>
-            <span style="font-size:.8rem;color:var(--text-muted);margin-left:8px;">PowerShell — new window</span>
+            <span style="font-size:.78rem;color:var(--text-muted);margin-left:8px;">PowerShell — new window</span>
           </div>
           <div class="install-body">
             <span class="cmd-comment"># Allow local scripts to run (one-time)</span><br>
@@ -755,8 +920,8 @@
             <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">irm https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/install.ps1 | iex</span>
           </div>
         </div>
-        <p style="color:var(--text-muted);font-size:.82rem;margin-bottom:6px;">The installer will:</p>
-        <ul style="color:var(--text-muted);font-size:.82rem;padding-left:20px;line-height:2.2;">
+        <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:6px;">The installer will:</p>
+        <ul style="color:var(--text-muted);font-size:.8rem;padding-left:20px;line-height:2.3;">
           <li>Install <a href="https://obsidian.md">Obsidian</a> if missing — <strong style="color:var(--text);">pauses</strong> so you can create a vault before continuing</li>
           <li>Ask for your vault path (default: <code>Documents\Obsidian Vault</code>)</li>
           <li>Create <code>Inbox/</code>, <code>Notes/</code>, and <code>Capture.md</code></li>
@@ -768,16 +933,16 @@
 
     <!-- Step 3 -->
     <div style="display:flex;gap:16px;align-items:flex-start;max-width:640px;">
-      <div style="background:rgba(34,197,94,.2);border:1px solid rgba(34,197,94,.4);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#86efac;flex-shrink:0;margin-top:2px;">3</div>
+      <div style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(236,72,153,.2));border:1.5px solid rgba(192,132,252,.5);border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--lavender);flex-shrink:0;margin-top:2px;">3</div>
       <div style="width:100%;">
-        <h4 style="margin-bottom:8px;">Verify — open a new terminal</h4>
-        <p style="color:var(--text-muted);font-size:.82rem;margin-bottom:10px;">The installer set environment variables that only load in a <strong style="color:var(--text);">new</strong> terminal window.</p>
+        <h4 style="margin-bottom:8px;color:var(--text);">Verify — open a new terminal</h4>
+        <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:10px;">The installer set environment variables that only load in a <strong style="color:var(--text);">new</strong> terminal window.</p>
         <div class="install-box" style="margin-bottom:12px;">
           <div class="install-header">
             <div class="traffic-light tl-red"></div>
             <div class="traffic-light tl-yellow"></div>
             <div class="traffic-light tl-green"></div>
-            <span style="font-size:.8rem;color:var(--text-muted);margin-left:8px;">PowerShell — new window</span>
+            <span style="font-size:.78rem;color:var(--text-muted);margin-left:8px;">PowerShell — new window</span>
           </div>
           <div class="install-body">
             <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">claude</span><br>
@@ -787,7 +952,7 @@
             <span class="cmd-comment"># ✗ if 0 tools: exit Claude and run claude again</span>
           </div>
         </div>
-        <p style="color:var(--text-muted);font-size:.82rem;">Run <code>/mcp</code> every time you start a new Claude session to confirm the vault is connected.</p>
+        <p style="color:var(--text-muted);font-size:.8rem;">Run <code>/mcp</code> every time you start a new Claude session to confirm the vault is connected.</p>
       </div>
     </div>
   </div>
@@ -796,6 +961,7 @@
 <!-- ── Footer ─────────────────────────────────────────────────────────────────── -->
 <footer>
   <div class="container">
+    <div class="footer-cats">🐱 ✦ 🐾 ✦ 🐱</div>
     <p style="margin-bottom:12px;">
       <span class="tag">Node.js 18+</span>
       <span class="tag">TypeScript</span>
