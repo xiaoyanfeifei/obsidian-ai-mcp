@@ -2,7 +2,7 @@
 
 > Give Claude direct access to your Obsidian vault — search, read, and write notes using natural language. Your vault stays local on your machine.
 
-**[→ Full docs and live demo site](https://xiaoyanfeifei.github.io/obsidian-ai-mcp/)**
+**[→ Full docs & intro](https://xiaoyanfeifei.github.io/obsidian-ai-mcp/)**
 
 Works in two modes:
 
