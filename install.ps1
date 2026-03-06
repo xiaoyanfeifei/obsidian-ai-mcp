@@ -395,7 +395,8 @@ Notes are personal — written for quick re-reading and thinking, not for an aud
 Write-Host ""
 Write-Host "  Registering MCP server..." -ForegroundColor Cyan
 
-claude mcp remove obsidian 2>$null
+claude mcp remove obsidian 2>$null | Out-Null
+$LASTEXITCODE = 0  # suppress non-zero exit from remove if not found
 
 claude mcp add obsidian `
     --env "OBSIDIAN_VAULT=$vaultPath" `
