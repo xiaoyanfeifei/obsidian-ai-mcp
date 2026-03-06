@@ -106,7 +106,7 @@ export function prependToContent(
   if (dividerIdx !== -1) {
     const before = body.slice(0, dividerIdx + 5); // up to and including "\n---\n"
     const after = body.slice(dividerIdx + 5);
-    newBody = before + '\n' + newText + (after.trim() ? '\n\n' + after.trimStart() : '\n');
+    newBody = before + '\n' + newText + (after.trim() ? '\n' + after.trimStart() : '\n');
   } else {
     newBody = '\n' + newText + '\n' + body;
   }
