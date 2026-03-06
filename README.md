@@ -43,11 +43,22 @@ GitHub Codespace → Cloudflare tunnel → localhost:PORT → vault on disk
 
 ---
 
-## Install (Windows)
+## Install
 
-### Step 1 — Install prerequisites
+> **Pick your setup first — the steps are different:**
+>
+> | Setup | When to use |
+> |-------|-------------|
+> | **Local** | Claude Code runs on the **same Windows machine** as your vault |
+> | **Codespace** | Claude Code runs in **GitHub Codespaces** and your vault is on a local Windows machine |
 
-These must be installed **before** running the installer:
+---
+
+### Local setup (Windows)
+
+Claude Code and your vault are on the same machine. The MCP server runs as a local process — no tunnel, no server to keep running.
+
+**Step 1 — Install prerequisites**
 
 | Tool | Install |
 |------|---------|
@@ -56,9 +67,7 @@ These must be installed **before** running the installer:
 
 After installing both, **open a new PowerShell window** so they're on your PATH.
 
-### Step 2 — Run the installer
-
-In PowerShell (one command — no download needed):
+**Step 2 — Run the installer**
 
 ```powershell
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
@@ -66,44 +75,35 @@ irm https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/insta
 ```
 
 The installer will:
-1. **Install Obsidian** if not found — then pause and walk you through creating a vault before continuing
+1. **Install Obsidian** if not found — pauses so you can create a vault before continuing
 2. **Ask for your vault path** — defaults to `Documents\Obsidian Vault`
 3. **Create `Inbox/`, `Notes/`, and `Capture.md`** in your vault
 4. **Generate a secure auth token** and save it as an environment variable
 5. **Register the MCP server** with Claude Code — first run downloads the package (~10 seconds)
 
-### Step 3 — Verify it works
+**Step 3 — Verify**
 
-**Open a new PowerShell window** (required — the installer set environment variables that need a fresh terminal), then:
+Open a **new** PowerShell window (the installer set environment variables that need a fresh terminal):
 
 ```powershell
 claude
-```
-
-Inside Claude, run:
-```
+# inside Claude:
 /mcp
 ```
 
 You should see `obsidian` listed with **14 tools connected**. If you see 0 tools, exit Claude and run it again.
 
-**Do the `/mcp` check every time you start a new Claude session** — it confirms the vault connection is live before you start working.
+Run `/mcp` every time you start a new Claude session to confirm the vault is connected.
 
 ---
 
-## Manual setup (skip the installer)
+### Codespace setup (HTTP + Cloudflare tunnel)
 
-### Local (stdio) — Windows only
+Claude Code runs in a GitHub Codespace. Your vault lives on your local Windows machine. A Cloudflare tunnel bridges the two — no ports opened, no data leaves your machine.
 
-```powershell
-claude mcp add obsidian `
-  --env "OBSIDIAN_VAULT=C:\Users\you\Documents\MyVault" `
-  -- npx -y obsidian-ai-mcp
-```
+**Step 1 — On your local Windows machine**
 
-### Codespace (HTTP + Cloudflare tunnel)
-
-**On your local machine** — edit `start.ps1` and fill in:
+Edit `start.ps1` and fill in your values:
 
 ```powershell
 $AUTH_TOKEN = "your-secret-token"
@@ -111,25 +111,30 @@ $VAULT      = "C:\path\to\your\vault"
 $TIMEZONE   = "America/Los_Angeles"
 ```
 
-Then run:
+Then run it to start the server and tunnel:
 
 ```powershell
 .\start.ps1
 ```
 
-Output will include a one-liner to run in your Codespace:
+The output will include a one-liner to run inside your Codespace:
 
 ```
 curl -s https://<tunnel-url>.trycloudflare.com/setup.sh | bash
 ```
 
-**In your Codespace** — run that curl command, then:
+**Step 2 — In your Codespace**
 
-1. `claude`
-2. `/mcp` → click **Authenticate** → browser opens → auto-closes
-3. Start a fresh Claude session — tools are live
+Run the curl command from step 1, then:
 
-**Automate with dotfiles (optional):** copy `dotfiles/install.sh` into your GitHub dotfiles repo and enable it at **GitHub Settings → Codespaces → Dotfiles**. After that, every new Codespace gets a `setup-obsidian <url>` shell function automatically.
+```
+claude
+/mcp   → click Authenticate → browser opens → auto-closes
+```
+
+Start a **fresh** Claude session — tools are live.
+
+**Automate with dotfiles (optional):** copy `dotfiles/install.sh` into your GitHub dotfiles repo and enable it at **GitHub Settings → Codespaces → Dotfiles**. Every new Codespace gets a `setup-obsidian <url>` shell function automatically.
 
 ---
 

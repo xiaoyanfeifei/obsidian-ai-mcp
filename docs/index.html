@@ -794,6 +794,29 @@
         <p>Lives in <code>Notes/</code> forever. Inbox draft deleted. Vault stays clean.</p>
       </div>
     </div>
+
+    <!-- Vault tree example -->
+    <p style="color:var(--text-muted);font-size:.9rem;margin-top:48px;margin-bottom:16px;">What your vault looks like after a productive day:</p>
+    <div class="arch-box" style="font-size:.82rem;line-height:1.9;">
+<span style="color:var(--pink-light);font-weight:700;">Your Vault/</span>
+│
+├── <span style="color:var(--lavender);font-weight:700;">Inbox/</span>                                         <span style="color:#4a2a6e;">← drafts — review before promoting</span>
+│   ├── <span style="color:var(--purple-light);">2026-03-05 - Devlog - Auth PR Refactor.md</span>     <span style="color:#4a2a6e;">← created at session start, appended all day</span>
+│   ├── <span style="color:var(--purple-light);">2026-03-05 - Meeting - Daily.md</span>               <span style="color:#4a2a6e;">← logged inline while in Claude</span>
+│   ├── <span style="color:var(--purple-light);">2026-03-05 - Learning - V8 Deopt Patterns.md</span>  <span style="color:#4a2a6e;">← captured without switching context</span>
+│   ├── <span style="color:var(--purple-light);">2026-03-04 - Spec - Rate Limiting.md</span>          <span style="color:#4a2a6e;">← yesterday's draft, ready to promote</span>
+│   ├── <span style="color:#4a2a6e;">Capture.md</span>                                    <span style="color:#4a2a6e;">← quick tasks and thoughts, newest at top</span>
+│   └── <span style="color:#4a2a6e;">README.md</span>
+│
+├── <span style="color:var(--lavender);font-weight:700;">Notes/</span>                                         <span style="color:#4a2a6e;">← permanent — append-only, never overwritten</span>
+│   ├── <span style="color:#86efac;">Auth Strategy.md</span>                              <span style="color:#4a2a6e;">← promoted last week, still evolving via append</span>
+│   ├── <span style="color:#86efac;">Current Works.md</span>                              <span style="color:#4a2a6e;">← living project tracker with open tasks</span>
+│   ├── <span style="color:#86efac;">Rate Limiting — Decision.md</span>                   <span style="color:#4a2a6e;">← ADR promoted after team sign-off</span>
+│   └── <span style="color:#86efac;">Redis Caching Devlog.md</span>                       <span style="color:#4a2a6e;">← permanent session log from last sprint</span>
+│
+└── <span style="color:var(--lavender);font-weight:700;">Trash/</span>                                         <span style="color:#4a2a6e;">← deleted notes (recoverable)</span>
+    └── <span style="color:#4a2a6e;">2026-02-20 - Devlog - Old Spike.md</span>
+    </div>
   </div>
 </section>
 
@@ -880,80 +903,135 @@
 <section id="install">
   <div class="container">
     <div class="section-label">✦ Getting started</div>
-    <h2>Install in one command 🐾</h2>
-    <p class="section-intro">Requires Windows, Node.js 18+, and Claude Code CLI. The installer handles everything else — including Obsidian, vault setup, and MCP registration.</p>
+    <h2>Install 🐾</h2>
+    <p class="section-intro">The setup depends on where Claude Code runs. <strong style="color:var(--text);">Pick your path first</strong> — the steps are different.</p>
 
-    <!-- Step 1 -->
-    <div style="display:flex;gap:16px;align-items:flex-start;max-width:640px;margin-bottom:32px;">
-      <div style="background:linear-gradient(135deg,rgba(236,72,153,.2),rgba(147,51,234,.2));border:1.5px solid rgba(236,72,153,.5);border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--pink-light);flex-shrink:0;margin-top:2px;">1</div>
-      <div>
-        <h4 style="margin-bottom:8px;color:var(--text);">Install prerequisites first</h4>
-        <p style="color:var(--text-muted);font-size:.87rem;margin-bottom:10px;">These must be installed <strong style="color:var(--text);">before</strong> running the installer or it will error out.</p>
-        <div style="display:flex;flex-direction:column;gap:6px;">
-          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:.84rem;">
-            <strong style="color:var(--text);">Node.js 18+</strong> &nbsp;→&nbsp; <a href="https://nodejs.org">nodejs.org</a> — download and run the installer
+    <!-- Mode picker -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:620px;margin-bottom:48px;">
+      <a href="#install-local" style="display:block;background:linear-gradient(135deg,rgba(236,72,153,.12),rgba(147,51,234,.08));border:1.5px solid rgba(236,72,153,.45);border-radius:14px;padding:20px;text-decoration:none;">
+        <div style="font-size:22px;margin-bottom:8px;">🖥️</div>
+        <div style="font-weight:800;color:var(--pink-light);margin-bottom:6px;">Local</div>
+        <div style="font-size:.8rem;color:var(--text-muted);">Claude Code and your vault are on the <strong style="color:var(--text);">same Windows machine</strong></div>
+      </a>
+      <a href="#install-codespace" style="display:block;background:linear-gradient(135deg,rgba(192,132,252,.1),rgba(147,51,234,.06));border:1.5px solid rgba(192,132,252,.4);border-radius:14px;padding:20px;text-decoration:none;">
+        <div style="font-size:22px;margin-bottom:8px;">☁️</div>
+        <div style="font-weight:800;color:var(--lavender);margin-bottom:6px;">Codespace</div>
+        <div style="font-size:.8rem;color:var(--text-muted);">Claude Code in <strong style="color:var(--text);">GitHub Codespaces</strong>; vault on local Windows machine</div>
+      </a>
+    </div>
+
+    <!-- ── LOCAL ─────────────────────────────────────────── -->
+    <div id="install-local" style="margin-bottom:52px;">
+      <h3 style="font-size:1.1rem;font-weight:800;color:var(--pink-light);margin-bottom:4px;">🖥️ Local setup</h3>
+      <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:24px;">The MCP server runs as a local process — no tunnel, nothing to keep running.</p>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:22px;">
+        <div style="background:linear-gradient(135deg,rgba(236,72,153,.2),rgba(147,51,234,.2));border:1.5px solid rgba(236,72,153,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--pink-light);flex-shrink:0;margin-top:2px;">1</div>
+        <div>
+          <h4 style="margin-bottom:8px;color:var(--text);">Install prerequisites</h4>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:.83rem;"><strong style="color:var(--text);">Node.js 18+</strong> &nbsp;→&nbsp; <a href="https://nodejs.org">nodejs.org</a></div>
+            <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:.83rem;"><strong style="color:var(--text);">Claude Code CLI</strong> &nbsp;→&nbsp; <a href="https://claude.ai/code">claude.ai/code</a></div>
           </div>
-          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:.84rem;">
-            <strong style="color:var(--text);">Claude Code CLI</strong> &nbsp;→&nbsp; <a href="https://claude.ai/code">claude.ai/code</a> — follow the setup instructions
+          <p style="color:var(--text-muted);font-size:.78rem;margin-top:6px;">After both are installed, open a <strong style="color:var(--text);">new PowerShell window</strong>.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:22px;">
+        <div style="background:linear-gradient(135deg,rgba(236,72,153,.2),rgba(147,51,234,.2));border:1.5px solid rgba(236,72,153,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--pink-light);flex-shrink:0;margin-top:2px;">2</div>
+        <div style="width:100%;">
+          <h4 style="margin-bottom:8px;color:var(--text);">Run the installer</h4>
+          <div class="install-box">
+            <div class="install-header">
+              <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
+              <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">PowerShell</span>
+            </div>
+            <div class="install-body">
+              <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force</span><br>
+              <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">irm https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/install.ps1 | iex</span>
+            </div>
+          </div>
+          <p style="color:var(--text-muted);font-size:.78rem;margin-top:6px;">Sets up Obsidian, vault folders, and registers the MCP server automatically.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;">
+        <div style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(236,72,153,.2));border:1.5px solid rgba(192,132,252,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--lavender);flex-shrink:0;margin-top:2px;">3</div>
+        <div style="width:100%;">
+          <h4 style="margin-bottom:8px;color:var(--text);">Verify — open a new terminal</h4>
+          <div class="install-box">
+            <div class="install-header">
+              <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
+              <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">PowerShell — new window</span>
+            </div>
+            <div class="install-body">
+              <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">claude</span><br>
+              <span class="cmd-prompt">&gt;</span><span class="cmd-text">/mcp</span><br>
+              <span class="cmd-comment"># ✓ obsidian — 14 tools &nbsp;(if 0: exit and re-run claude)</span>
+            </div>
           </div>
         </div>
-        <p style="color:var(--text-muted);font-size:.8rem;margin-top:8px;">After installing both, open a <strong style="color:var(--text);">new PowerShell window</strong> so they're on your PATH.</p>
       </div>
     </div>
 
-    <!-- Step 2 -->
-    <div style="display:flex;gap:16px;align-items:flex-start;max-width:640px;margin-bottom:32px;">
-      <div style="background:linear-gradient(135deg,rgba(236,72,153,.2),rgba(147,51,234,.2));border:1.5px solid rgba(236,72,153,.5);border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--pink-light);flex-shrink:0;margin-top:2px;">2</div>
-      <div style="width:100%;">
-        <h4 style="margin-bottom:8px;color:var(--text);">Run the installer</h4>
-        <p style="color:var(--text-muted);font-size:.87rem;margin-bottom:10px;">Paste these two lines in PowerShell — no download needed:</p>
-        <div class="install-box" style="margin-bottom:12px;">
-          <div class="install-header">
-            <div class="traffic-light tl-red"></div>
-            <div class="traffic-light tl-yellow"></div>
-            <div class="traffic-light tl-green"></div>
-            <span style="font-size:.78rem;color:var(--text-muted);margin-left:8px;">PowerShell — new window</span>
-          </div>
-          <div class="install-body">
-            <span class="cmd-comment"># Allow local scripts to run (one-time)</span><br>
-            <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force</span><br>
-            <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">irm https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/install.ps1 | iex</span>
-          </div>
-        </div>
-        <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:6px;">The installer will:</p>
-        <ul style="color:var(--text-muted);font-size:.8rem;padding-left:20px;line-height:2.3;">
-          <li>Install <a href="https://obsidian.md">Obsidian</a> if missing — <strong style="color:var(--text);">pauses</strong> so you can create a vault before continuing</li>
-          <li>Ask for your vault path (default: <code>Documents\Obsidian Vault</code>)</li>
-          <li>Create <code>Inbox/</code>, <code>Notes/</code>, and <code>Capture.md</code></li>
-          <li>Generate a secure auth token</li>
-          <li>Register the MCP server — <strong style="color:var(--text);">first run downloads the package (~10s)</strong>, this is normal</li>
-        </ul>
-      </div>
-    </div>
+    <!-- ── CODESPACE ─────────────────────────────────────── -->
+    <div id="install-codespace" style="border-top:1px solid var(--border);padding-top:40px;">
+      <h3 style="font-size:1.1rem;font-weight:800;color:var(--lavender);margin-bottom:4px;">☁️ Codespace setup</h3>
+      <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:6px;">Your vault lives on your local Windows machine. A Cloudflare tunnel bridges it to the Codespace — no ports opened, your files stay local.</p>
+      <p style="color:#f87171;font-size:.82rem;font-weight:600;margin-bottom:24px;">⚠️ Do not follow the local installer steps above — they register a local stdio server that won't work from a remote Codespace.</p>
 
-    <!-- Step 3 -->
-    <div style="display:flex;gap:16px;align-items:flex-start;max-width:640px;">
-      <div style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(236,72,153,.2));border:1.5px solid rgba(192,132,252,.5);border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--lavender);flex-shrink:0;margin-top:2px;">3</div>
-      <div style="width:100%;">
-        <h4 style="margin-bottom:8px;color:var(--text);">Verify — open a new terminal</h4>
-        <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:10px;">The installer set environment variables that only load in a <strong style="color:var(--text);">new</strong> terminal window.</p>
-        <div class="install-box" style="margin-bottom:12px;">
-          <div class="install-header">
-            <div class="traffic-light tl-red"></div>
-            <div class="traffic-light tl-yellow"></div>
-            <div class="traffic-light tl-green"></div>
-            <span style="font-size:.78rem;color:var(--text-muted);margin-left:8px;">PowerShell — new window</span>
+      <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:22px;">
+        <div style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(147,51,234,.2));border:1.5px solid rgba(192,132,252,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--lavender);flex-shrink:0;margin-top:2px;">1</div>
+        <div style="width:100%;">
+          <h4 style="margin-bottom:8px;color:var(--text);">On your local Windows machine — start the tunnel</h4>
+          <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:8px;">Edit <code>start.ps1</code> with your values, then run it:</p>
+          <div class="install-box" style="margin-bottom:8px;">
+            <div class="install-header">
+              <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
+              <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">start.ps1 — edit these lines</span>
+            </div>
+            <div class="install-body">
+              <span class="cmd-text">$AUTH_TOKEN = </span><span style="color:#86efac;">"your-secret-token"</span><br>
+              <span class="cmd-text">$VAULT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= </span><span style="color:#86efac;">"C:\path\to\your\vault"</span><br>
+              <span class="cmd-text">$TIMEZONE &nbsp;&nbsp;= </span><span style="color:#86efac;">"America/Los_Angeles"</span>
+            </div>
           </div>
-          <div class="install-body">
-            <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">claude</span><br>
-            <span class="cmd-comment"># inside Claude, run:</span><br>
-            <span class="cmd-prompt">&gt;</span><span class="cmd-text">/mcp</span><br>
-            <span class="cmd-comment"># ✓ you should see: obsidian — 14 tools</span><br>
-            <span class="cmd-comment"># ✗ if 0 tools: exit Claude and run claude again</span>
+          <div class="install-box">
+            <div class="install-header">
+              <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
+              <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">PowerShell</span>
+            </div>
+            <div class="install-body">
+              <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">.\start.ps1</span><br>
+              <span class="cmd-comment"># outputs a curl command — copy it</span>
+            </div>
           </div>
         </div>
-        <p style="color:var(--text-muted);font-size:.8rem;">Run <code>/mcp</code> every time you start a new Claude session to confirm the vault is connected.</p>
       </div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:22px;">
+        <div style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(147,51,234,.2));border:1.5px solid rgba(192,132,252,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--lavender);flex-shrink:0;margin-top:2px;">2</div>
+        <div style="width:100%;">
+          <h4 style="margin-bottom:8px;color:var(--text);">In your Codespace — connect and authenticate</h4>
+          <div class="install-box">
+            <div class="install-header">
+              <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
+              <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">Codespace terminal</span>
+            </div>
+            <div class="install-body">
+              <span class="cmd-comment"># paste the curl from step 1:</span><br>
+              <span class="cmd-prompt">$</span><span class="cmd-text">curl -s https://&lt;tunnel-url&gt;.trycloudflare.com/setup.sh | bash</span><br>
+              <span class="cmd-prompt">$</span><span class="cmd-text">claude</span><br>
+              <span class="cmd-prompt">&gt;</span><span class="cmd-text">/mcp</span> <span class="cmd-comment"> → Authenticate → browser opens → auto-closes</span>
+            </div>
+          </div>
+          <p style="color:var(--text-muted);font-size:.78rem;margin-top:6px;">Start a fresh Claude session after authenticating — tools are live.</p>
+        </div>
+      </div>
+
+      <p style="color:var(--text-muted);font-size:.8rem;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;max-width:620px;">
+        <strong style="color:var(--text);">Automate with dotfiles:</strong> copy <code>dotfiles/install.sh</code> into your GitHub dotfiles repo → <strong>GitHub Settings → Codespaces → Dotfiles</strong>. Every new Codespace gets a <code>setup-obsidian &lt;url&gt;</code> shell function automatically.
+      </p>
     </div>
   </div>
 </section>
