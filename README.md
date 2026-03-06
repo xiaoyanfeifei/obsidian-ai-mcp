@@ -97,37 +97,26 @@ Run `/mcp` every time you start a new Claude session to confirm the vault is con
 
 ---
 
-### Codespace setup (HTTP + Cloudflare tunnel)
+### Codespace setup (HTTP + Cloudflare connection)
 
-Claude Code runs in a GitHub Codespace. Your vault lives on your local Windows machine. A Cloudflare tunnel bridges the two — no ports opened, no data leaves your machine.
+Claude Code runs in a GitHub Codespace. Your vault lives on your local Windows machine. Since a Codespace can't reach `localhost` directly, `start.ps1` creates a secure Cloudflare connection that gives your Codespace a temporary URL to reach the vault. Nothing is stored; the connection closes when you stop the script.
+
+**Prerequisite:** run the local installer first — it sets `OBSIDIAN_VAULT` and `MCP_AUTH_TOKEN` automatically, so `start.ps1` needs no editing.
 
 **Step 1 — On your local Windows machine**
 
-Edit `start.ps1` and fill in your values:
-
-```powershell
-$AUTH_TOKEN = "your-secret-token"
-$VAULT      = "C:\path\to\your\vault"
-$TIMEZONE   = "America/Los_Angeles"
-```
-
-Then run it to start the server and tunnel:
+Run this once and keep it running while you work:
 
 ```powershell
 .\start.ps1
-```
-
-The output will include a one-liner to run inside your Codespace:
-
-```
-curl -s https://<tunnel-url>.trycloudflare.com/setup.sh | bash
+# prints a curl command when ready — copy it
 ```
 
 **Step 2 — In your Codespace**
 
-Run the curl command from step 1, then:
-
-```
+```bash
+# paste the curl command from step 1:
+curl -s https://<url>.trycloudflare.com/setup.sh | bash
 claude
 /mcp   → click Authenticate → browser opens → auto-closes
 ```

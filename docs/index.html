@@ -976,25 +976,15 @@
     <!-- ── CODESPACE ─────────────────────────────────────── -->
     <div id="install-codespace" style="border-top:1px solid var(--border);padding-top:40px;">
       <h3 style="font-size:1.1rem;font-weight:800;color:var(--lavender);margin-bottom:4px;">☁️ Codespace setup</h3>
-      <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:6px;">Your vault lives on your local Windows machine. A Cloudflare tunnel bridges it to the Codespace — no ports opened, your files stay local.</p>
-      <p style="color:#f87171;font-size:.82rem;font-weight:600;margin-bottom:24px;">⚠️ Do not follow the local installer steps above — they register a local stdio server that won't work from a remote Codespace.</p>
+      <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:6px;">Your vault lives on your local Windows machine. Your Codespace runs in GitHub's cloud and can't reach <code>localhost</code> directly — so <code>start.ps1</code> creates a secure Cloudflare connection that gives your Codespace a temporary URL to reach the vault. Nothing is stored; the connection closes when you stop the script.</p>
+      <p style="color:var(--text-muted);font-size:.82rem;margin-bottom:6px;"><strong style="color:var(--text);">Prerequisite:</strong> run the local installer first — it sets the vault path and auth token automatically.</p>
+      <p style="color:#f87171;font-size:.82rem;font-weight:600;margin-bottom:24px;">⚠️ Only run the local installer steps above if you also use Claude Code locally. Skip them if you only use Codespaces.</p>
 
       <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:22px;">
         <div style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(147,51,234,.2));border:1.5px solid rgba(192,132,252,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--lavender);flex-shrink:0;margin-top:2px;">1</div>
         <div style="width:100%;">
-          <h4 style="margin-bottom:8px;color:var(--text);">On your local Windows machine — start the tunnel</h4>
-          <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:8px;">Edit <code>start.ps1</code> with your values, then run it:</p>
-          <div class="install-box" style="margin-bottom:8px;">
-            <div class="install-header">
-              <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
-              <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">start.ps1 — edit these lines</span>
-            </div>
-            <div class="install-body">
-              <span class="cmd-text">$AUTH_TOKEN = </span><span style="color:#86efac;">"your-secret-token"</span><br>
-              <span class="cmd-text">$VAULT &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= </span><span style="color:#86efac;">"C:\path\to\your\vault"</span><br>
-              <span class="cmd-text">$TIMEZONE &nbsp;&nbsp;= </span><span style="color:#86efac;">"America/Los_Angeles"</span>
-            </div>
-          </div>
+          <h4 style="margin-bottom:6px;color:var(--text);">On your local Windows machine</h4>
+          <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:8px;">Run this once — it starts the server and creates the connection. Keep it running while you work in the Codespace.</p>
           <div class="install-box">
             <div class="install-header">
               <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
@@ -1002,7 +992,7 @@
             </div>
             <div class="install-body">
               <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">.\start.ps1</span><br>
-              <span class="cmd-comment"># outputs a curl command — copy it</span>
+              <span class="cmd-comment"># prints a curl command when ready — copy it</span>
             </div>
           </div>
         </div>
@@ -1011,25 +1001,25 @@
       <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:22px;">
         <div style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(147,51,234,.2));border:1.5px solid rgba(192,132,252,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--lavender);flex-shrink:0;margin-top:2px;">2</div>
         <div style="width:100%;">
-          <h4 style="margin-bottom:8px;color:var(--text);">In your Codespace — connect and authenticate</h4>
+          <h4 style="margin-bottom:6px;color:var(--text);">In your Codespace</h4>
           <div class="install-box">
             <div class="install-header">
               <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
               <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">Codespace terminal</span>
             </div>
             <div class="install-body">
-              <span class="cmd-comment"># paste the curl from step 1:</span><br>
-              <span class="cmd-prompt">$</span><span class="cmd-text">curl -s https://&lt;tunnel-url&gt;.trycloudflare.com/setup.sh | bash</span><br>
+              <span class="cmd-comment"># paste the curl command from step 1:</span><br>
+              <span class="cmd-prompt">$</span><span class="cmd-text">curl -s https://&lt;url&gt;.trycloudflare.com/setup.sh | bash</span><br>
               <span class="cmd-prompt">$</span><span class="cmd-text">claude</span><br>
-              <span class="cmd-prompt">&gt;</span><span class="cmd-text">/mcp</span> <span class="cmd-comment"> → Authenticate → browser opens → auto-closes</span>
+              <span class="cmd-prompt">&gt;</span><span class="cmd-text">/mcp</span> <span class="cmd-comment"> → Authenticate → done</span>
             </div>
           </div>
-          <p style="color:var(--text-muted);font-size:.78rem;margin-top:6px;">Start a fresh Claude session after authenticating — tools are live.</p>
+          <p style="color:var(--text-muted);font-size:.78rem;margin-top:6px;">Start a fresh Claude session after authenticating — 14 tools live.</p>
         </div>
       </div>
 
       <p style="color:var(--text-muted);font-size:.8rem;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;max-width:620px;">
-        <strong style="color:var(--text);">Automate with dotfiles:</strong> copy <code>dotfiles/install.sh</code> into your GitHub dotfiles repo → <strong>GitHub Settings → Codespaces → Dotfiles</strong>. Every new Codespace gets a <code>setup-obsidian &lt;url&gt;</code> shell function automatically.
+        <strong style="color:var(--text);">Automate with dotfiles:</strong> copy <code>dotfiles/install.sh</code> into your GitHub dotfiles repo → <strong>GitHub Settings → Codespaces → Dotfiles</strong>. Every new Codespace gets a <code>setup-obsidian &lt;url&gt;</code> shell function — skip the curl step entirely.
       </p>
     </div>
   </div>
