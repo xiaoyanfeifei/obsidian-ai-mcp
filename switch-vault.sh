@@ -46,7 +46,8 @@ fi
 
 if [[ ! -d "$VAULT_PATH" ]]; then
   echo "  Path not found: $VAULT_PATH"
-  read -rp "  Create it? [Y/n]: " CREATE_IT  if [[ "${CREATE_IT:-Y}" =~ ^[Yy] ]]; then
+  read -rp "  Create it? [Y/n]: " CREATE_IT
+  if [[ "${CREATE_IT:-Y}" =~ ^[Yy] ]]; then
     mkdir -p "$VAULT_PATH"
     echo "  Created: $VAULT_PATH"
   else
