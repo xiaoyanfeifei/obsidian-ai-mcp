@@ -2,6 +2,8 @@
 
 > Give Claude direct access to your Obsidian vault — search, read, and write notes using natural language. Your vault stays local on your machine.
 
+**[→ Full docs and live demo site](https://xiaoyanfeifei.github.io/obsidian-ai-mcp/)**
+
 Works in two modes:
 
 | Mode | When to use |
@@ -113,16 +115,29 @@ irm https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/start
 # prints a curl command when ready — copy it
 ```
 
-**Step 2 — In your Codespace**
+**Step 2 — In your Codespace: run setup**
 
 ```bash
-# paste the curl command from step 1:
+# paste the curl command printed by start.ps1:
 curl -s https://<url>.trycloudflare.com/setup.sh | bash
-claude
-/mcp   → click Authenticate → browser opens → auto-closes
 ```
 
-Start a **fresh** Claude session — tools are live.
+**Step 3 — Authenticate, then start a fresh Claude session**
+
+```bash
+claude
+# inside Claude:
+/mcp
+# click Authenticate → browser tab opens → auto-closes
+/exit
+
+# start a new Claude session — tools are now live:
+claude
+```
+
+> **Important:** you must start a **new** Claude session after authenticating. The auth token is loaded at startup, not mid-session.
+
+You should see `obsidian` listed with **14 tools connected**.
 
 **Automate with dotfiles (optional):** copy `dotfiles/install.sh` into your GitHub dotfiles repo and enable it at **GitHub Settings → Codespaces → Dotfiles**. Every new Codespace gets a `setup-obsidian <url>` shell function automatically.
 
@@ -158,6 +173,20 @@ Inbox/2026-03-04 - Devlog - Auth PR.md   →   Notes/Auth PR Devlog.md
 ```
 
 This keeps AI-generated drafts isolated from your permanent notes until you've reviewed them.
+
+---
+
+## Why use with Codespace?
+
+Your Obsidian vault becomes Claude's memory inside Codespace — specs, bug notes, and context you already wrote flow directly into the code session. No copy-paste, no re-explaining.
+
+| Use case | How it works |
+|----------|-------------|
+| **Spec → implementation** | Write the feature spec in Obsidian, then: "read my caching spec and implement the TTL logic in `src/cache.ts`" — Claude reads your design intent and the code simultaneously |
+| **Bug investigation** | Log observed behavior and hypotheses as you debug, then: "read my auth bug notes and look at `src/auth/` — what am I missing?" |
+| **Resume where you left off** | Log "what I did and what's next" in your devlog. Next Codespace: "read my devlog from yesterday and catch me up" — even from a brand new Codespace |
+| **Code review with checklist** | Jot review concerns in Obsidian, then: "read my review checklist and go through the changed files in PR #142" |
+| **ADR → code** | Write an Architecture Decision Record for the chosen approach, then: "read my ADR on pagination and implement it" — design intent travels intact into implementation |
 
 ---
 

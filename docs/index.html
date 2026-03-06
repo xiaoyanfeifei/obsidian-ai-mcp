@@ -765,6 +765,69 @@
   </div>
 </section>
 
+<!-- ── Codespace use cases ────────────────────────────────────────────────────── -->
+<section id="codespace-usecases">
+  <div class="container">
+    <div class="section-label">✦ Codespace + vault</div>
+    <h2>Why connect from Codespace? ☁️</h2>
+    <p class="section-intro">Your Obsidian vault becomes Claude's memory inside Codespace — specs, bug notes, and context you already wrote flow directly into the code session. No copy-paste, no re-explaining.</p>
+
+    <div class="usecases-grid">
+
+      <div class="usecase-card cat3">
+        <div class="usecase-emoji">📐</div>
+        <h3>Spec → implementation</h3>
+        <p>Write the feature spec in Obsidian — goals, non-goals, design decisions. Open Codespace and say "read my caching spec and implement the TTL logic in <code>src/cache.ts</code>." Claude reads your design intent <em>and</em> the actual code simultaneously, no copy-paste.</p>
+        <div class="prompt-list">
+          <div class="prompt">read my rate limiting spec and look at src/middleware — start implementing</div>
+          <div class="prompt">what open questions are left in my auth spec?</div>
+        </div>
+      </div>
+
+      <div class="usecase-card cat1">
+        <div class="usecase-emoji">🐛</div>
+        <h3>Bug investigation from notes</h3>
+        <p>Log observed behavior, error messages, and hypotheses in Obsidian as you debug. In Codespace: "read my auth bug investigation and look at <code>src/auth/</code> — what am I missing?" Your notes become the diagnostic brief — no re-explaining symptoms from scratch.</p>
+        <div class="prompt-list">
+          <div class="prompt">read my bug notes on the token refresh issue and look at the code</div>
+          <div class="prompt">add to my investigation: null user_id appears when cookie is expired</div>
+        </div>
+      </div>
+
+      <div class="usecase-card cat2">
+        <div class="usecase-emoji">🔁</div>
+        <h3>Resume where you left off</h3>
+        <p>End your session by logging "what I did, what broke, what's next" in your devlog. Next Codespace — even a brand new one — just say "read my devlog from yesterday and tell me where I stopped." Zero mental overhead reconstructing context.</p>
+        <div class="prompt-list">
+          <div class="prompt">read my devlog from yesterday and catch me up</div>
+          <div class="prompt">log: paused here — pagination query is returning wrong offset</div>
+        </div>
+      </div>
+
+      <div class="usecase-card cat5">
+        <div class="usecase-emoji">📋</div>
+        <h3>Code review with a checklist</h3>
+        <p>Before a PR review, jot your checklist in Obsidian — things to verify, patterns to look for, concerns from the design meeting. In Codespace: "read my review checklist for PR #142 and go through the changed files." Structured <em>and</em> code-aware.</p>
+        <div class="prompt-list">
+          <div class="prompt">read my review notes for the auth PR and check the changed files</div>
+          <div class="prompt">add to review checklist: confirm rate limit headers on all endpoints</div>
+        </div>
+      </div>
+
+      <div class="usecase-card cat4">
+        <div class="usecase-emoji">🏛️</div>
+        <h3>Decision → code</h3>
+        <p>Write an Architecture Decision Record capturing your chosen approach and the reasoning. Then: "read my ADR on pagination and implement it in the API following that decision." Your design intent travels intact into the implementation — no guessing what you meant.</p>
+        <div class="prompt-list">
+          <div class="prompt">read my ADR on the event queue design and implement it</div>
+          <div class="prompt">log decision: chose cursor pagination over offset — see ADR</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ── Workflow ────────────────────────────────────────────────────────────────── -->
 <section id="workflow">
   <div class="container">
@@ -1002,7 +1065,8 @@
       <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:22px;">
         <div style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(147,51,234,.2));border:1.5px solid rgba(192,132,252,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--lavender);flex-shrink:0;margin-top:2px;">2</div>
         <div style="width:100%;">
-          <h4 style="margin-bottom:6px;color:var(--text);">In your Codespace</h4>
+          <h4 style="margin-bottom:6px;color:var(--text);">In your Codespace — run setup</h4>
+          <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:8px;">Paste the curl command printed by step 1. This writes the MCP config into your Codespace.</p>
           <div class="install-box">
             <div class="install-header">
               <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
@@ -1010,12 +1074,33 @@
             </div>
             <div class="install-body">
               <span class="cmd-comment"># paste the curl command from step 1:</span><br>
-              <span class="cmd-prompt">$</span><span class="cmd-text">curl -s https://&lt;url&gt;.trycloudflare.com/setup.sh | bash</span><br>
-              <span class="cmd-prompt">$</span><span class="cmd-text">claude</span><br>
-              <span class="cmd-prompt">&gt;</span><span class="cmd-text">/mcp</span> <span class="cmd-comment"> → Authenticate → done</span>
+              <span class="cmd-prompt">$</span><span class="cmd-text">curl -s https://&lt;url&gt;.trycloudflare.com/setup.sh | bash</span>
             </div>
           </div>
-          <p style="color:var(--text-muted);font-size:.78rem;margin-top:6px;">Start a fresh Claude session after authenticating — 14 tools live.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:22px;">
+        <div style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(147,51,234,.2));border:1.5px solid rgba(192,132,252,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--lavender);flex-shrink:0;margin-top:2px;">3</div>
+        <div style="width:100%;">
+          <h4 style="margin-bottom:6px;color:var(--text);">Authenticate, then start a fresh Claude session</h4>
+          <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:8px;">Run <code>/mcp</code> inside Claude, click <strong style="color:var(--text);">Authenticate</strong> — a browser tab opens and auto-closes. Then exit and start a new Claude session. The 14 vault tools are now live.</p>
+          <div class="install-box">
+            <div class="install-header">
+              <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
+              <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">Codespace terminal</span>
+            </div>
+            <div class="install-body">
+              <span class="cmd-prompt">$</span><span class="cmd-text">claude</span><br>
+              <span class="cmd-prompt">&gt;</span><span class="cmd-text">/mcp</span><br>
+              <span class="cmd-comment"># click Authenticate → browser opens → auto-closes</span><br>
+              <span class="cmd-comment"># exit claude, then start a new session:</span><br>
+              <span class="cmd-prompt">&gt;</span><span class="cmd-text">/exit</span><br>
+              <span class="cmd-prompt">$</span><span class="cmd-text">claude</span><br>
+              <span class="cmd-comment"># ✓ obsidian — 14 tools live</span>
+            </div>
+          </div>
+          <p style="color:#fbbf24;font-size:.78rem;margin-top:8px;">⚠️ You must start a <strong>new</strong> Claude session after authenticating — the token is loaded at startup, not mid-session.</p>
         </div>
       </div>
 
