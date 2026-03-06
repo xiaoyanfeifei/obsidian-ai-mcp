@@ -412,7 +412,14 @@ if (Test-Path $claudeJsonPath) {
     $claudeJson | ConvertTo-Json -Depth 10 | Set-Content $claudeJsonPath -Encoding UTF8
     Write-Host "  ✓ Registered obsidian MCP server (user scope)" -ForegroundColor Green
 } else {
-    Write-Warning "Could not find $claudeJsonPath — run 'claude' once first, then re-run this installer."
+    # .claude.json doesn't exist yet — create a minimal one
+    $newClaudeJson = [PSCustomObject]@{
+        mcpServers = [PSCustomObject]@{
+            obsidian = $mcpEntry
+        }
+    }
+    $newClaudeJson | ConvertTo-Json -Depth 10 | Set-Content $claudeJsonPath -Encoding UTF8
+    Write-Host "  ✓ Created $claudeJsonPath with obsidian MCP server" -ForegroundColor Green
 }
 
 Write-Host ""
