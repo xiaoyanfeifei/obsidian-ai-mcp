@@ -4,6 +4,8 @@
 
 **[→ Full docs & intro](https://xiaoyanfeifei.github.io/obsidian-ai-mcp/)**
 
+Works with **Claude Code**, **GitHub Copilot CLI**, and any other MCP-compatible client. The install script registers with Claude Code automatically — for other clients, see [Other MCP clients](https://xiaoyanfeifei.github.io/obsidian-ai-mcp/#other-clients).
+
 Works in two modes:
 
 | Mode | When to use |

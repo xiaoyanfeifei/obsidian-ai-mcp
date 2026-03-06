@@ -1361,6 +1361,48 @@
   </div>
 </section>
 
+<!-- ── Other MCP clients ───────────────────────────────────────────────────────── -->
+<section id="other-clients" style="border-top:1px solid var(--border);">
+  <div class="container">
+    <div class="section-label">✦ Other AI clients</div>
+    <h2>Works with GitHub Copilot too 🤝</h2>
+    <p class="section-intro">The MCP server is client-agnostic — any tool that supports the MCP STDIO protocol can use it. The install script only registers with Claude Code; for other clients, add it manually.</p>
+
+    <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;color:var(--lavender);">GitHub Copilot CLI</h3>
+    <p style="color:var(--text-muted);font-size:.88rem;margin-bottom:20px;">Inside a Copilot CLI session, run <code>/mcp add</code> and fill in the interactive prompts:</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;max-width:860px;margin-bottom:28px;">
+      <div style="background:rgba(10,4,28,0.6);border:1px solid rgba(192,132,252,0.18);border-radius:14px;padding:20px;">
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;color:var(--purple-light);margin-bottom:8px;text-transform:uppercase;">Server Name</div>
+        <code style="font-size:.9rem;color:var(--text);">obsidian</code>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:6px;">Any unique name you like</div>
+      </div>
+      <div style="background:rgba(10,4,28,0.6);border:1px solid rgba(192,132,252,0.18);border-radius:14px;padding:20px;">
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;color:var(--purple-light);margin-bottom:8px;text-transform:uppercase;">Server Type</div>
+        <code style="font-size:.9rem;color:var(--text);">2 — STDIO</code>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:6px;">Press 2 for STDIO</div>
+      </div>
+      <div style="background:rgba(10,4,28,0.6);border:1px solid rgba(192,132,252,0.18);border-radius:14px;padding:20px;">
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;color:var(--purple-light);margin-bottom:8px;text-transform:uppercase;">Command</div>
+        <code style="font-size:.9rem;color:var(--text);">npx obsidian-ai-mcp@latest</code>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:6px;">Downloads and runs the latest version automatically</div>
+      </div>
+      <div style="background:rgba(10,4,28,0.6);border:1px solid rgba(192,132,252,0.18);border-radius:14px;padding:20px;">
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;color:var(--purple-light);margin-bottom:8px;text-transform:uppercase;">Environment Variables</div>
+        <code style="font-size:.85rem;color:var(--text);">OBSIDIAN_VAULT=C:\path\to\vault</code>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:6px;">Full path to your vault folder</div>
+      </div>
+      <div style="background:rgba(10,4,28,0.6);border:1px solid rgba(192,132,252,0.18);border-radius:14px;padding:20px;">
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.08em;color:var(--purple-light);margin-bottom:8px;text-transform:uppercase;">Tools</div>
+        <code style="font-size:.9rem;color:var(--text);">*</code>
+        <div style="font-size:.78rem;color:var(--text-muted);margin-top:6px;">Keep the default — enables all 14 vault tools</div>
+      </div>
+    </div>
+
+    <p style="color:var(--text-muted);font-size:.83rem;max-width:620px;">The core vault tools work with any MCP client. The <code>vault_context.md</code> preference file is sent at session start — whether the model follows it depends on the client.</p>
+  </div>
+</section>
+
 <!-- ── Footer ─────────────────────────────────────────────────────────────────── -->
 <footer>
   <div class="container">
@@ -1373,6 +1415,7 @@
       <span class="tag">Mac</span>
       <span class="tag">Obsidian</span>
       <span class="tag">Claude Code</span>
+      <span class="tag">GitHub Copilot</span>
       <span class="tag">Cloudflare Tunnel</span>
     </p>
     <p>obsidian-ai-mcp · MIT License</p>
