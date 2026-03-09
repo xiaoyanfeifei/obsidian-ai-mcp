@@ -1,6 +1,6 @@
 # obsidian-ai-mcp
 
-> Give Claude direct access to your Obsidian vault — search, read, and write notes using natural language. Your vault stays local on your machine.
+> Give Claude Code and GitHub Copilot direct access to your Obsidian vault — search, read, and write notes using natural language. Your vault stays local on your machine.
 
 **[→ Full docs & intro](https://xiaoyanfeifei.github.io/obsidian-ai-mcp/)**
 
