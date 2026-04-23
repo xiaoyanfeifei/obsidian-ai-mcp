@@ -1222,14 +1222,13 @@
           <!-- Copilot sub-section -->
           <div style="background:rgba(10,4,28,0.4);border:1px solid rgba(192,132,252,0.2);border-radius:12px;padding:16px 18px;max-width:580px;">
             <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;color:var(--purple-light);text-transform:uppercase;margin-bottom:10px;">GitHub Copilot</div>
-            <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:8px;">Create or edit <code style="color:var(--text);">/home/vscode/.copilot/mcp-config.json</code> with the tunnel URL printed by step 1:</p>
+            <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:12px;">Run <code style="color:var(--text);">/mcp</code> in a Copilot session — it prints the path to its config file. Click to open it in VS Code, then paste the snippet below (using the tunnel URL from step 1):</p>
             <div class="install-box" style="margin-bottom:10px;">
               <div class="install-header">
                 <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
-                <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">Codespace terminal</span>
+                <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">mcp.json</span>
               </div>
               <div class="install-body">
-                <span class="cmd-prompt">$</span><span class="cmd-text">mkdir -p ~/.copilot && cat &gt; ~/.copilot/mcp-config.json &lt;&lt; 'EOF'</span><br>
                 <span class="cmd-text">{</span><br>
                 <span class="cmd-text">&nbsp;&nbsp;"mcpServers": {</span><br>
                 <span class="cmd-text">&nbsp;&nbsp;&nbsp;&nbsp;"obsidian": {</span><br>
@@ -1237,13 +1236,10 @@
                 <span class="cmd-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"url": "https://&lt;url&gt;.trycloudflare.com/mcp"</span><br>
                 <span class="cmd-text">&nbsp;&nbsp;&nbsp;&nbsp;}</span><br>
                 <span class="cmd-text">&nbsp;&nbsp;}</span><br>
-                <span class="cmd-text">}</span><br>
-                <span class="cmd-text">EOF</span><br>
-                <span class="cmd-comment"># reload Copilot or open a new Codespace session</span>
+                <span class="cmd-text">}</span>
               </div>
             </div>
             <p style="color:var(--text-muted);font-size:.76rem;margin:0;">Note: Codespace Copilot requires <code>mcpServers</code> — not <code>servers</code>. Wrong key causes a startup error.</p>
-            <p style="color:var(--text-muted);font-size:.76rem;margin-top:8px;"><strong style="color:var(--text);">Tip:</strong> Run <code>/mcp</code> in a Copilot session and it will print the path to its config file — click to open it in VS Code and paste your config in directly.</p>
           </div>
         </div>
       </div>
