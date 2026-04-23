@@ -1168,15 +1168,16 @@
     <!-- ── CODESPACE ─────────────────────────────────────── -->
     <div id="install-codespace" style="border-top:1px solid var(--border);padding-top:40px;">
       <h3 style="font-size:1.1rem;font-weight:800;color:var(--lavender);margin-bottom:4px;">☁️ Codespace setup</h3>
-      <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:6px;">Your vault lives on your local Windows machine. Your Codespace runs in GitHub's cloud and can't reach <code>localhost</code> directly — so <code>start.ps1</code> creates a secure Cloudflare connection that gives your Codespace a temporary URL to reach the vault. Nothing is stored; the connection closes when you stop the script.</p>
+      <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:6px;">Works with both <strong style="color:var(--text);">Claude Code</strong> and <strong style="color:var(--text);">GitHub Copilot</strong> in Codespaces. Your vault lives on your local Windows machine — <code>start.ps1</code> creates a secure Cloudflare tunnel so your Codespace can reach it. Nothing is stored; the connection closes when you stop the script.</p>
       <p style="color:var(--text-muted);font-size:.82rem;margin-bottom:6px;"><strong style="color:var(--text);">Prerequisite:</strong> run the local installer first — it sets the vault path and auth token automatically.</p>
       <p style="color:#f87171;font-size:.82rem;font-weight:600;margin-bottom:24px;">⚠️ Only run the local installer steps above if you also use Claude Code locally. Skip them if you only use Codespaces.</p>
 
+      <!-- Step 1 -->
       <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:22px;">
         <div style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(147,51,234,.2));border:1.5px solid rgba(192,132,252,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--lavender);flex-shrink:0;margin-top:2px;">1</div>
         <div style="width:100%;">
           <h4 style="margin-bottom:6px;color:var(--text);">On your local Windows machine</h4>
-          <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:8px;">Download and run — keep it running while you work in the Codespace.</p>
+          <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:8px;">Download and run — keep it running while you work in the Codespace. It will print config snippets for both Claude Code and Copilot when ready.</p>
           <div class="install-box">
             <div class="install-header">
               <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
@@ -1185,58 +1186,73 @@
             <div class="install-body">
               <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">irm https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/start.ps1 -OutFile start.ps1</span><br>
               <span class="cmd-prompt">PS&gt;</span><span class="cmd-text">.\start.ps1</span><br>
-              <span class="cmd-comment"># prints a curl command when ready — copy it</span>
+              <span class="cmd-comment"># prints setup instructions for Claude Code and Copilot</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:22px;">
+      <!-- Step 2 -->
+      <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:28px;">
         <div style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(147,51,234,.2));border:1.5px solid rgba(192,132,252,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--lavender);flex-shrink:0;margin-top:2px;">2</div>
         <div style="width:100%;">
-          <h4 style="margin-bottom:6px;color:var(--text);">In your Codespace — run setup</h4>
-          <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:8px;">Paste the curl command printed by step 1. This writes the MCP config into your Codespace.</p>
-          <div class="install-box">
-            <div class="install-header">
-              <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
-              <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">Codespace terminal</span>
-            </div>
-            <div class="install-body">
-              <span class="cmd-comment"># paste the curl command from step 1:</span><br>
-              <span class="cmd-prompt">$</span><span class="cmd-text">curl -s https://&lt;url&gt;.trycloudflare.com/setup.sh | bash</span>
-            </div>
-          </div>
-        </div>
-      </div>
+          <h4 style="margin-bottom:6px;color:var(--text);">In your Codespace — connect your AI tool</h4>
+          <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:16px;">Follow the instructions for whichever tool you use — or both.</p>
 
-      <div style="display:flex;gap:14px;align-items:flex-start;max-width:620px;margin-bottom:22px;">
-        <div style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(147,51,234,.2));border:1.5px solid rgba(192,132,252,.5);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--lavender);flex-shrink:0;margin-top:2px;">3</div>
-        <div style="width:100%;">
-          <h4 style="margin-bottom:6px;color:var(--text);">Authenticate, then start a fresh Claude session</h4>
-          <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:8px;">Run <code>/mcp</code> inside Claude, click <strong style="color:var(--text);">Authenticate</strong> — a browser tab opens and auto-closes. Then exit and start a new Claude session. The 14 vault tools are now live.</p>
-          <div class="install-box">
-            <div class="install-header">
-              <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
-              <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">Codespace terminal</span>
+          <!-- Claude Code sub-section -->
+          <div style="background:rgba(10,4,28,0.4);border:1px solid rgba(192,132,252,0.2);border-radius:12px;padding:16px 18px;margin-bottom:14px;max-width:580px;">
+            <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;color:var(--purple-light);text-transform:uppercase;margin-bottom:10px;">Claude Code</div>
+            <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:8px;">Paste the curl command printed by step 1 — it writes the MCP config automatically:</p>
+            <div class="install-box" style="margin-bottom:10px;">
+              <div class="install-header">
+                <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
+                <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">Codespace terminal</span>
+              </div>
+              <div class="install-body">
+                <span class="cmd-prompt">$</span><span class="cmd-text">curl -s https://&lt;url&gt;.trycloudflare.com/setup.sh | bash</span><br>
+                <span class="cmd-prompt">$</span><span class="cmd-text">claude</span><br>
+                <span class="cmd-prompt">&gt;</span><span class="cmd-text">/mcp</span><br>
+                <span class="cmd-comment"># click Authenticate → browser opens → auto-closes</span><br>
+                <span class="cmd-prompt">&gt;</span><span class="cmd-text">/exit</span><br>
+                <span class="cmd-prompt">$</span><span class="cmd-text">claude</span><br>
+                <span class="cmd-comment"># ✓ obsidian — 14 tools live</span>
+              </div>
             </div>
-            <div class="install-body">
-              <span class="cmd-prompt">$</span><span class="cmd-text">claude</span><br>
-              <span class="cmd-prompt">&gt;</span><span class="cmd-text">/mcp</span><br>
-              <span class="cmd-comment"># click Authenticate → browser opens → auto-closes</span><br>
-              <span class="cmd-comment"># exit claude, then start a new session:</span><br>
-              <span class="cmd-prompt">&gt;</span><span class="cmd-text">/exit</span><br>
-              <span class="cmd-prompt">$</span><span class="cmd-text">claude</span><br>
-              <span class="cmd-comment"># ✓ obsidian — 14 tools live</span>
-            </div>
+            <p style="color:#fbbf24;font-size:.76rem;margin:0;">⚠️ You must start a <strong>new</strong> Claude session after authenticating — the token is loaded at startup, not mid-session.</p>
           </div>
-          <p style="color:#fbbf24;font-size:.78rem;margin-top:8px;">⚠️ You must start a <strong>new</strong> Claude session after authenticating — the token is loaded at startup, not mid-session.</p>
+
+          <!-- Copilot sub-section -->
+          <div style="background:rgba(10,4,28,0.4);border:1px solid rgba(192,132,252,0.2);border-radius:12px;padding:16px 18px;max-width:580px;">
+            <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;color:var(--purple-light);text-transform:uppercase;margin-bottom:10px;">GitHub Copilot</div>
+            <p style="color:var(--text-muted);font-size:.8rem;margin-bottom:8px;">Create or edit <code style="color:var(--text);">/home/vscode/.copilot/mcp-config.json</code> with the tunnel URL printed by step 1:</p>
+            <div class="install-box" style="margin-bottom:10px;">
+              <div class="install-header">
+                <div class="traffic-light tl-red"></div><div class="traffic-light tl-yellow"></div><div class="traffic-light tl-green"></div>
+                <span style="font-size:.76rem;color:var(--text-muted);margin-left:8px;">Codespace terminal</span>
+              </div>
+              <div class="install-body">
+                <span class="cmd-prompt">$</span><span class="cmd-text">mkdir -p ~/.copilot && cat &gt; ~/.copilot/mcp-config.json &lt;&lt; 'EOF'</span><br>
+                <span class="cmd-text">{</span><br>
+                <span class="cmd-text">&nbsp;&nbsp;"mcpServers": {</span><br>
+                <span class="cmd-text">&nbsp;&nbsp;&nbsp;&nbsp;"obsidian": {</span><br>
+                <span class="cmd-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"type": "http",</span><br>
+                <span class="cmd-text">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"url": "https://&lt;url&gt;.trycloudflare.com/mcp"</span><br>
+                <span class="cmd-text">&nbsp;&nbsp;&nbsp;&nbsp;}</span><br>
+                <span class="cmd-text">&nbsp;&nbsp;}</span><br>
+                <span class="cmd-text">}</span><br>
+                <span class="cmd-text">EOF</span><br>
+                <span class="cmd-comment"># reload Copilot or open a new Codespace session</span>
+              </div>
+            </div>
+            <p style="color:var(--text-muted);font-size:.76rem;margin:0;">Note: Codespace Copilot requires <code>mcpServers</code> — not <code>servers</code>. Wrong key causes a startup error.</p>
+          </div>
         </div>
       </div>
 
       <p style="color:var(--text-muted);font-size:.8rem;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;max-width:620px;">
         <strong style="color:var(--text);">Automate with dotfiles:</strong> copy <code>dotfiles/install.sh</code> into your GitHub dotfiles repo → <strong>GitHub Settings → Codespaces → Dotfiles</strong>. Every new Codespace gets a <code>setup-obsidian &lt;url&gt;</code> shell function — skip the curl step entirely.
       </p>
-    </div><!-- end install-claude -->
+    </div><!-- end install-codespace -->
 
     <!-- ── GITHUB COPILOT CLI ──────────────────────────────── -->
     <div id="install-copilot" style="border-top:1px solid var(--border);padding-top:48px;margin-top:8px;">
