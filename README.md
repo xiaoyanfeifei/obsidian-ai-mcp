@@ -10,8 +10,8 @@ Works in two modes:
 
 | Mode | When to use |
 |------|-------------|
-| **Local** (stdio) | Claude Desktop or Claude Code on the same machine |
-| **Remote** (HTTP + tunnel) | Claude Code in GitHub Codespaces |
+| **Local** (stdio) | Claude Code or GitHub Copilot CLI on the same machine |
+| **Remote** (HTTP + tunnel) | Claude Code **or GitHub Copilot** in GitHub Codespaces |
 
 ---
 
@@ -67,7 +67,7 @@ GitHub Codespace → Cloudflare tunnel → localhost:PORT → vault on disk
 > |-------|-------------|
 > | **Local — Windows** | Claude Code and your vault are on the same Windows machine |
 > | **Local — Mac** | Claude Code and your vault are on the same Mac |
-> | **Codespace** | Claude Code runs in GitHub Codespaces; vault is on your local machine |
+> | **Codespace** | Claude Code **or GitHub Copilot** in GitHub Codespaces; vault is on your local machine |
 
 ---
 
@@ -153,30 +153,28 @@ You should see `obsidian` listed with **14 tools connected**. If you see 0 tools
 
 ### Codespace setup (HTTP + Cloudflare connection)
 
-Claude Code runs in a GitHub Codespace. Your vault lives on your local Windows machine. Since a Codespace can't reach `localhost` directly, `start.ps1` creates a secure Cloudflare connection that gives your Codespace a temporary URL to reach the vault. Nothing is stored; the connection closes when you stop the script.
+Works with both **Claude Code** and **GitHub Copilot** in Codespaces. Your vault lives on your local Windows machine — since a Codespace can't reach `localhost` directly, `start.ps1` creates a secure Cloudflare connection that gives your Codespace a temporary URL to reach the vault. Nothing is stored; the connection closes when you stop the script.
 
 **Prerequisite:** run the local installer first — it sets `OBSIDIAN_VAULT` and `MCP_AUTH_TOKEN` automatically.
 
 **Step 1 — On your local Windows machine**
 
-Download and run `start.ps1` — keep it running while you work in the Codespace:
+Download and run `start.ps1` — keep it running while you work in the Codespace. It prints setup instructions for both Claude Code and Copilot when ready:
 
 ```powershell
 irm https://raw.githubusercontent.com/xiaoyanfeifei/obsidian-ai-mcp/master/start.ps1 -OutFile start.ps1
 .\start.ps1
-# prints a curl command when ready — copy it
+# prints setup instructions for Claude Code and Copilot
 ```
 
-**Step 2 — In your Codespace: run setup**
+**Step 2 — In your Codespace — connect your AI tool**
+
+**Claude Code:**
 
 ```bash
 # paste the curl command printed by start.ps1:
 curl -s https://<url>.trycloudflare.com/setup.sh | bash
-```
 
-**Step 3 — Authenticate, then start a fresh Claude session**
-
-```bash
 claude
 # inside Claude:
 /mcp
@@ -189,7 +187,25 @@ claude
 
 > **Important:** you must start a **new** Claude session after authenticating. The auth token is loaded at startup, not mid-session.
 
-You should see `obsidian` listed with **14 tools connected**.
+**GitHub Copilot:**
+
+Create or edit `/home/vscode/.copilot/mcp-config.json` with the tunnel URL printed by step 1:
+
+```bash
+mkdir -p ~/.copilot && cat > ~/.copilot/mcp-config.json << 'EOF'
+{
+  "mcpServers": {
+    "obsidian": {
+      "type": "http",
+      "url": "https://<url>.trycloudflare.com/mcp"
+    }
+  }
+}
+EOF
+# reload Copilot or open a new Codespace session
+```
+
+> **Note:** Codespace Copilot requires `mcpServers` — not `servers`. Using the wrong key causes a startup error.
 
 **Automate with dotfiles (optional):** copy `dotfiles/install.sh` into your GitHub dotfiles repo and enable it at **GitHub Settings → Codespaces → Dotfiles**. Every new Codespace gets a `setup-obsidian <url>` shell function automatically.
 
