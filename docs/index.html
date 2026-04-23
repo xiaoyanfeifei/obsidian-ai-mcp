@@ -1240,37 +1240,40 @@
 
     <!-- ── GITHUB COPILOT CLI ──────────────────────────────── -->
     <div id="install-copilot" style="border-top:1px solid var(--border);padding-top:48px;margin-top:8px;">
-      <h3 style="font-size:1.15rem;font-weight:800;color:var(--lavender);margin-bottom:8px;">🐙 GitHub Copilot CLI</h3>
-      <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:24px;">Inside a Copilot CLI session, run <code>/mcp add</code> and fill in each prompt:</p>
+      <h3 style="font-size:1.15rem;font-weight:800;color:var(--lavender);margin-bottom:8px;">🐙 GitHub Copilot</h3>
+      <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:28px;">Two setups depending on where Copilot is running. The config key and file location differ between VS Code (local) and Codespace.</p>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;max-width:860px;margin-bottom:24px;">
-        <div style="background:rgba(10,4,28,0.6);border:1px solid rgba(192,132,252,0.2);border-radius:14px;padding:18px;">
-          <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;color:var(--purple-light);margin-bottom:8px;text-transform:uppercase;">Server Name</div>
-          <code style="font-size:.9rem;color:var(--text);">obsidian</code>
-          <div style="font-size:.76rem;color:var(--text-muted);margin-top:6px;">Any unique name you like</div>
-        </div>
-        <div style="background:rgba(10,4,28,0.6);border:1px solid rgba(192,132,252,0.2);border-radius:14px;padding:18px;">
-          <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;color:var(--purple-light);margin-bottom:8px;text-transform:uppercase;">Server Type</div>
-          <code style="font-size:.9rem;color:var(--text);">2 — STDIO</code>
-          <div style="font-size:.76rem;color:var(--text-muted);margin-top:6px;">Press 2 for STDIO</div>
-        </div>
-        <div style="background:rgba(10,4,28,0.6);border:1px solid rgba(192,132,252,0.2);border-radius:14px;padding:18px;">
-          <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;color:var(--purple-light);margin-bottom:8px;text-transform:uppercase;">Command</div>
-          <code style="font-size:.85rem;color:var(--text);">npx obsidian-ai-mcp@latest</code>
-          <div style="font-size:.76rem;color:var(--text-muted);margin-top:6px;">Downloads and runs the latest version automatically</div>
-        </div>
-        <div style="background:rgba(10,4,28,0.6);border:1px solid rgba(192,132,252,0.2);border-radius:14px;padding:18px;">
-          <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;color:var(--purple-light);margin-bottom:8px;text-transform:uppercase;">Environment Variables</div>
-          <code style="font-size:.82rem;color:var(--text);">OBSIDIAN_VAULT=C:\path\to\vault</code>
-          <div style="font-size:.76rem;color:var(--text-muted);margin-top:6px;">Full path to your vault folder</div>
-        </div>
-        <div style="background:rgba(10,4,28,0.6);border:1px solid rgba(192,132,252,0.2);border-radius:14px;padding:18px;">
-          <div style="font-size:.7rem;font-weight:700;letter-spacing:.08em;color:var(--purple-light);margin-bottom:8px;text-transform:uppercase;">Tools</div>
-          <code style="font-size:.9rem;color:var(--text);">*</code>
-          <div style="font-size:.76rem;color:var(--text-muted);margin-top:6px;">Keep the default — enables all 14 vault tools</div>
-        </div>
+      <!-- VS Code local -->
+      <div style="margin-bottom:32px;">
+        <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;color:var(--purple-light);text-transform:uppercase;margin-bottom:10px;">VS Code — local machine</div>
+        <p style="color:var(--text-muted);font-size:.82rem;margin-bottom:10px;">Add to <code>.vscode/mcp.json</code> in your project (or your user-level VS Code settings):</p>
+        <pre style="background:rgba(10,4,28,0.7);border:1px solid rgba(192,132,252,0.2);border-radius:10px;padding:16px 20px;font-size:.82rem;color:var(--text);overflow-x:auto;margin:0 0 8px;">{
+  "servers": {
+    "obsidian": {
+      "type": "http",
+      "url": "https://&lt;your-tunnel&gt;.trycloudflare.com/mcp"
+    }
+  }
+}</pre>
+        <p style="font-size:.76rem;color:var(--text-muted);margin:0;">Then: Copilot Chat → Agent mode → select obsidian tools.</p>
       </div>
-      <p style="color:var(--text-muted);font-size:.82rem;max-width:580px;">Node.js 18+ must be installed. The vault tools all work — whether Copilot follows your <code>vault_context.md</code> preferences depends on the model.</p>
+
+      <!-- Codespace -->
+      <div style="margin-bottom:32px;">
+        <div style="font-size:.75rem;font-weight:700;letter-spacing:.08em;color:var(--purple-light);text-transform:uppercase;margin-bottom:10px;">GitHub Codespace</div>
+        <p style="color:var(--text-muted);font-size:.82rem;margin-bottom:6px;">Create or edit <code style="color:var(--text);">/home/vscode/.copilot/mcp-config.json</code> inside the Codespace:</p>
+        <pre style="background:rgba(10,4,28,0.7);border:1px solid rgba(192,132,252,0.2);border-radius:10px;padding:16px 20px;font-size:.82rem;color:var(--text);overflow-x:auto;margin:0 0 8px;">{
+  "mcpServers": {
+    "obsidian": {
+      "type": "http",
+      "url": "https://&lt;your-tunnel&gt;.trycloudflare.com/mcp"
+    }
+  }
+}</pre>
+        <p style="font-size:.76rem;color:var(--text-muted);margin:0 0 6px;">Note: Codespace uses <code>mcpServers</code> — <strong style="color:var(--text);">not</strong> <code>servers</code>. Using the wrong key causes a startup error.</p>
+        <p style="font-size:.76rem;color:var(--text-muted);margin:0;">The tunnel URL is printed by <code>start.ps1</code> when you run it on your local machine. Reload Copilot or open a new Codespace session after saving.</p>
+      </div>
+
     </div><!-- end install-copilot -->
 
   </div>

@@ -102,15 +102,53 @@ try {
     Write-Warning "Health check failed - server may still be starting."
 }
 
-# 5. Print Codespace setup command
+# 5. Print connection instructions for Claude Code and GitHub Copilot
+$mcpUrl = "$tunnelUrl/mcp"
+
 Write-Host ""
 Write-Host "======================================================" -ForegroundColor Yellow
-Write-Host "  Run this in your Codespace to connect:             " -ForegroundColor Yellow
+Write-Host "  Claude Code (Codespace)                            " -ForegroundColor Yellow
 Write-Host "======================================================" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "  curl -s $tunnelUrl/setup.sh | bash" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "  (then: claude -> /mcp -> Authenticate -> fresh session)" -ForegroundColor Gray
+Write-Host ""
+Write-Host "======================================================" -ForegroundColor Yellow
+Write-Host "  GitHub Copilot - VS Code (local)                   " -ForegroundColor Yellow
+Write-Host "======================================================" -ForegroundColor Yellow
+Write-Host ""
+Write-Host "  Add to .vscode/mcp.json:" -ForegroundColor Gray
+Write-Host ""
+Write-Host '  {' -ForegroundColor Cyan
+Write-Host '    "servers": {' -ForegroundColor Cyan
+Write-Host '      "obsidian": {' -ForegroundColor Cyan
+Write-Host '        "type": "http",' -ForegroundColor Cyan
+Write-Host "        `"url`": `"$mcpUrl`"" -ForegroundColor Cyan
+Write-Host '      }' -ForegroundColor Cyan
+Write-Host '    }' -ForegroundColor Cyan
+Write-Host '  }' -ForegroundColor Cyan
+Write-Host ""
+Write-Host "  (then: Copilot Chat -> Agent mode -> select obsidian tools)" -ForegroundColor Gray
+Write-Host "======================================================" -ForegroundColor Yellow
+Write-Host ""
+Write-Host "======================================================" -ForegroundColor Yellow
+Write-Host "  GitHub Copilot - Codespace                         " -ForegroundColor Yellow
+Write-Host "======================================================" -ForegroundColor Yellow
+Write-Host ""
+Write-Host "  Paste into /home/vscode/.copilot/mcp-config.json:" -ForegroundColor Gray
+Write-Host "  (create the file if it doesn't exist)" -ForegroundColor Gray
+Write-Host ""
+Write-Host '  {' -ForegroundColor Cyan
+Write-Host '    "mcpServers": {' -ForegroundColor Cyan
+Write-Host '      "obsidian": {' -ForegroundColor Cyan
+Write-Host '        "type": "http",' -ForegroundColor Cyan
+Write-Host "        `"url`": `"$mcpUrl`"" -ForegroundColor Cyan
+Write-Host '      }' -ForegroundColor Cyan
+Write-Host '    }' -ForegroundColor Cyan
+Write-Host '  }' -ForegroundColor Cyan
+Write-Host ""
+Write-Host "  (then: reload Copilot or open a new Codespace session)" -ForegroundColor Gray
 Write-Host "======================================================" -ForegroundColor Yellow
 Write-Host ""
 Write-Host "Ctrl+C to stop." -ForegroundColor Gray
